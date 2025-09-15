@@ -1,15 +1,15 @@
 <template>
-  <div class="min-h-screen flex items-center justify-center bg-gray-50 dark:bg-gray-900 py-12 px-4 sm:px-6 lg:px-8">
+  <div class="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
     <div class="max-w-md w-full space-y-8">
       <div>
-        <h2 class="mt-6 text-center text-3xl font-extrabold text-gray-900 dark:text-white">
+        <h2 class="mt-6 text-center text-3xl font-extrabold text-gray-900">
           Sign in to your account
         </h2>
-        <p class="mt-2 text-center text-sm text-gray-600 dark:text-gray-400">
+        <p class="mt-2 text-center text-sm text-gray-600">
           Or
           <router-link
             to="/register"
-            class="font-medium text-primary-600 hover:text-primary-500 dark:text-primary-400 dark:hover:text-primary-300"
+            class="font-medium text-primary-600 hover:text-primary-500"
           >
             create a new account
           </router-link>
@@ -19,7 +19,7 @@
       <form class="mt-8 space-y-6" @submit.prevent="handleLogin">
         <div class="space-y-4">
           <div>
-            <label for="username" class="block text-sm font-medium text-gray-700 dark:text-gray-300">
+            <label for="username" class="block text-sm font-medium text-gray-700">
               Username or Email
             </label>
             <input
@@ -33,7 +33,7 @@
           </div>
           
           <div>
-            <label for="password" class="block text-sm font-medium text-gray-700 dark:text-gray-300">
+            <label for="password" class="block text-sm font-medium text-gray-700">
               Password
             </label>
             <input
@@ -55,13 +55,13 @@
               type="checkbox"
               class="h-4 w-4 text-primary-600 focus:ring-primary-500 border-gray-300 rounded"
             />
-            <label for="remember-me" class="ml-2 block text-sm text-gray-900 dark:text-gray-300">
+            <label for="remember-me" class="ml-2 block text-sm text-gray-900">
               Remember me
             </label>
           </div>
 
           <div class="text-sm">
-            <a href="#" class="font-medium text-primary-600 hover:text-primary-500 dark:text-primary-400 dark:hover:text-primary-300">
+            <a href="#" class="font-medium text-primary-600 hover:text-primary-500">
               Forgot your password?
             </a>
           </div>
@@ -79,11 +79,11 @@
         </div>
 
         <!-- Error Message -->
-        <div v-if="errorMessage" class="bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-md p-4">
+        <div v-if="errorMessage" class="bg-red-50 border border-red-200 rounded-md p-4">
           <div class="flex">
             <ExclamationTriangleIcon class="h-5 w-5 text-red-400" />
             <div class="ml-3">
-              <p class="text-sm text-red-800 dark:text-red-200">
+              <p class="text-sm text-red-800">
                 {{ errorMessage }}
               </p>
             </div>

@@ -5,36 +5,35 @@
   >
     <!-- Poster/Thumbnail -->
     <div class="relative">
-      <img
-        v-if="posterUrl"
-        :src="posterUrl"
-        :alt="media.metadata?.title || media.filename"
-        class="media-poster"
-        loading="lazy"
-      />
-      <div
-        v-else
-        class="media-poster bg-gray-700 flex items-center justify-center"
-      >
-        <component
-          :is="mediaIcon"
-          class="h-12 w-12 text-gray-400"
+        <img
+          v-if="isImage"
+          :src="mediaUrl"
+          :alt="media.original_filename"
+          class="media-poster"
+          loading="lazy"
         />
-      </div>
+        <div
+          v-else
+          class="media-poster bg-gray-700 flex items-center justify-center"
+        >
+          <component
+            :is="mediaIcon"
+            class="h-12 w-12 text-gray-400"
+          />
+        </div>
 
       <!-- Overlay -->
       <div class="media-overlay">
         <div class="media-info">
           <h3 class="media-title">
-            {{ media.metadata?.title || media.filename }}
+            {{ media.original_filename }}
           </h3>
           <div class="media-meta">
-            <span v-if="media.metadata?.year">{{ media.metadata.year }}</span>
-            <span v-if="media.metadata?.genre" class="ml-2">
-              {{ media.metadata.genre }}
-            </span>
-            <span v-if="media.duration" class="ml-2">
+            <span v-if="media.duration">
               {{ formatDuration(media.duration) }}
+            </span>
+            <span class="ml-2">
+              {{ formatFileSize(media.file_size) }}
             </span>
           </div>
         </div>
@@ -42,7 +41,7 @@
         <!-- Action Buttons -->
         <div class="absolute top-4 right-4 flex space-x-2">
           <button
-            v-if="media.media_type === 'video'"
+            v-if="isVideo"
             @click.stop="playMedia"
             class="bg-black bg-opacity-50 hover:bg-opacity-70 text-white p-2 rounded-full transition-all duration-200"
             title="Play"
@@ -126,27 +125,27 @@ const emit = defineEmits<{
 const router = useRouter()
 const showMenu = ref(false)
 
-const posterUrl = computed(() => {
-  if (props.media.poster_path) {
-    return `/api/v1/media/${props.media.id}/poster`
-  }
-  if (props.media.thumbnail_path) {
-    return `/api/v1/media/${props.media.id}/thumbnail`
-  }
-  return null
+const mediaUrl = computed(() => {
+  return `http://192.168.254.14:8000/media/${props.media.filename}`
+})
+
+const isVideo = computed(() => {
+  return props.media.mime_type.startsWith('video/')
+})
+
+const isImage = computed(() => {
+  return props.media.mime_type.startsWith('image/')
+})
+
+const isAudio = computed(() => {
+  return props.media.mime_type.startsWith('audio/')
 })
 
 const mediaIcon = computed(() => {
-  switch (props.media.media_type) {
-    case 'video':
-      return FilmIcon
-    case 'audio':
-      return MusicalNoteIcon
-    case 'image':
-      return PhotoIcon
-    default:
-      return FilmIcon
-  }
+  if (isVideo.value) return FilmIcon
+  if (isAudio.value) return MusicalNoteIcon
+  if (isImage.value) return PhotoIcon
+  return FilmIcon
 })
 
 function formatDuration(seconds: number): string {
@@ -160,21 +159,24 @@ function formatDuration(seconds: number): string {
   return `${minutes}:${secs.toString().padStart(2, '0')}`
 }
 
+function formatFileSize(bytes: number): string {
+  const sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB']
+  if (bytes === 0) return '0 Bytes'
+  const i = Math.floor(Math.log(bytes) / Math.log(1024))
+  return Math.round(bytes / Math.pow(1024, i) * 100) / 100 + ' ' + sizes[i]
+}
+
 function playMedia() {
-  if (props.media.media_type === 'video') {
-    router.push({
-      name: 'Player',
-      params: { id: props.media.id }
-    })
+  if (isVideo.value) {
+    // For now, just open the media URL directly
+    window.open(mediaUrl.value, '_blank')
   }
   showMenu.value = false
 }
 
 function viewDetails() {
-  router.push({
-    name: 'MediaDetail',
-    params: { id: props.media.id }
-  })
+  // For now, just show an alert with media info
+  alert(`Media Details:\nFilename: ${props.media.original_filename}\nSize: ${formatFileSize(props.media.file_size)}\nType: ${props.media.mime_type}`)
   showMenu.value = false
 }
 
@@ -184,7 +186,11 @@ function addToPlaylist() {
 }
 
 function downloadMedia() {
-  // TODO: Implement download functionality
+  // Download the media file
+  const link = document.createElement('a')
+  link.href = mediaUrl.value
+  link.download = props.media.original_filename
+  link.click()
   showMenu.value = false
 }
 </script>

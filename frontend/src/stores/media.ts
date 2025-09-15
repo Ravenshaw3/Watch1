@@ -16,15 +16,15 @@ export const useMediaStore = defineStore('media', () => {
 
   // Getters
   const videoFiles = computed(() => 
-    mediaFiles.value.filter(file => file.media_type === 'video')
+    mediaFiles.value.filter(file => file.mime_type.startsWith('video/'))
   )
   
   const audioFiles = computed(() => 
-    mediaFiles.value.filter(file => file.media_type === 'audio')
+    mediaFiles.value.filter(file => file.mime_type.startsWith('audio/'))
   )
   
   const imageFiles = computed(() => 
-    mediaFiles.value.filter(file => file.media_type === 'image')
+    mediaFiles.value.filter(file => file.mime_type.startsWith('image/'))
   )
 
   const recentFiles = computed(() => 
@@ -45,13 +45,13 @@ export const useMediaStore = defineStore('media', () => {
       })
       
       if (params.page === 1 || !params.page) {
-        mediaFiles.value = response.items
+        mediaFiles.value = response.media
       } else {
-        mediaFiles.value.push(...response.items)
+        mediaFiles.value.push(...response.media)
       }
       
       searchResults.value = response
-      totalPages.value = response.total_pages
+      totalPages.value = Math.ceil(response.total / response.page_size)
       currentPage.value = response.page
       
       return response
@@ -84,9 +84,9 @@ export const useMediaStore = defineStore('media', () => {
         ...params
       })
       
-      mediaFiles.value = response.items
+      mediaFiles.value = response.media
       searchResults.value = response
-      totalPages.value = response.total_pages
+      totalPages.value = Math.ceil(response.total / response.page_size)
       currentPage.value = 1
       
       return response

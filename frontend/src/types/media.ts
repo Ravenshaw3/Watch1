@@ -1,27 +1,15 @@
 export interface MediaFile {
-  id: number
+  id: string
   filename: string
   original_filename: string
   file_path: string
   file_size: number
-  file_hash: string
   mime_type: string
-  media_type: 'video' | 'audio' | 'image'
   duration?: number
   width?: number
   height?: number
-  bitrate?: number
-  codec?: string
-  container_format?: string
-  thumbnail_path?: string
-  poster_path?: string
-  is_processed: boolean
-  is_available: boolean
-  processing_status: 'pending' | 'processing' | 'completed' | 'failed'
   created_at: string
-  updated_at?: string
-  last_accessed?: string
-  metadata?: MediaMetadata
+  uploaded_by: string
 }
 
 export interface MediaMetadata {
@@ -57,11 +45,10 @@ export interface MediaSearchParams {
 }
 
 export interface MediaSearchResponse {
-  items: MediaFile[]
+  media: MediaFile[]
   total: number
   page: number
   page_size: number
-  total_pages: number
 }
 
 export interface MediaUploadResponse {

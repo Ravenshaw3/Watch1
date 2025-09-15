@@ -1,10 +1,10 @@
 export interface User {
-  id: number
+  id: string
   username: string
   email: string
   full_name?: string
   is_active: boolean
-  is_superuser: boolean
+  is_superuser?: boolean
   avatar_url?: string
   created_at: string
   updated_at?: string
@@ -26,7 +26,6 @@ export interface RegisterData {
 export interface AuthResponse {
   access_token: string
   token_type: string
-  expires_in: number
 }
 
 export interface TokenData {
