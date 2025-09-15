@@ -1,0 +1,45 @@
+version: '3.8'
+
+services:
+  backend:
+    image: ravenshaw3/watch1-backend:latest
+    container_name: watch1-backend
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./media:/app/media
+      - ./thumbnails:/app/thumbnails
+    environment:
+      - PYTHONPATH=/app
+    restart: unless-stopped
+    command: python media_main.py
+
+  frontend:
+    image: ravenshaw3/watch1-frontend:latest
+    container_name: watch1-frontend
+    ports:
+      - "3000:3000"
+    environment:
+      - VITE_API_URL=http://localhost:8000/api/v1
+    restart: unless-stopped
+    depends_on:
+      - backend
+
+  postgres:
+    image: postgres:15-alpine
+    container_name: watch1-postgres
+    environment:
+      - POSTGRES_DB=watch1
+      - POSTGRES_USER=watch1
+      - POSTGRES_PASSWORD=watch1password
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    restart: unless-stopped
+
+  redis:
+    image: redis:7-alpine
+    container_name: watch1-redis
+    restart: unless-stopped
+
+volumes:
+  postgres_data:
