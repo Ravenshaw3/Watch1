@@ -42,7 +42,7 @@ async def get_media_files(
     from sqlalchemy.orm import selectinload
     
     # Build query
-    stmt = select(MediaFile).options(selectinload(MediaFile.metadata))
+    stmt = select(MediaFile).options(selectinload(MediaFile.media_metadata))
     
     # Apply filters
     if media_type:
@@ -85,7 +85,7 @@ async def get_media_file(
     from sqlalchemy import select
     from sqlalchemy.orm import selectinload
     
-    stmt = select(MediaFile).options(selectinload(MediaFile.metadata)).where(MediaFile.id == file_id)
+    stmt = select(MediaFile).options(selectinload(MediaFile.media_metadata)).where(MediaFile.id == file_id)
     result = await db.execute(stmt)
     media_file = result.scalar_one_or_none()
     

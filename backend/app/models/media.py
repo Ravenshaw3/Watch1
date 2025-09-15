@@ -45,15 +45,15 @@ class MediaFile(Base):
     last_accessed = Column(DateTime(timezone=True))
     
     # Relationships
-    metadata = relationship("MediaMetadata", back_populates="media_file", uselist=False)
+    media_metadata = relationship("MediaInfo", back_populates="media_file", uselist=False)
     transcoded_files = relationship("TranscodedFile", back_populates="original_file")
     watch_history = relationship("WatchHistory", back_populates="media_file")
     ratings = relationship("Rating", back_populates="media_file")
     playlist_items = relationship("PlaylistItem", back_populates="media_file")
 
 
-class MediaMetadata(Base):
-    """Media metadata model"""
+class MediaInfo(Base):
+    """Media information model"""
     
     __tablename__ = "media_metadata"
     
@@ -84,7 +84,7 @@ class MediaMetadata(Base):
     updated_at = Column(DateTime(timezone=True), onupdate=func.now())
     
     # Relationships
-    media_file = relationship("MediaFile", back_populates="metadata")
+    media_file = relationship("MediaFile", back_populates="media_metadata")
 
 
 class TranscodedFile(Base):

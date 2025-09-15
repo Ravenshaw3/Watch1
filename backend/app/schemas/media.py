@@ -53,8 +53,8 @@ class MediaFile(MediaFileBase):
         from_attributes = True
 
 
-class MediaMetadataBase(BaseModel):
-    """Base media metadata schema"""
+class MediaInfoBase(BaseModel):
+    """Base media information schema"""
     title: Optional[str] = None
     description: Optional[str] = None
     genre: Optional[str] = None
@@ -70,18 +70,18 @@ class MediaMetadataBase(BaseModel):
     tmdb_id: Optional[str] = None
 
 
-class MediaMetadataCreate(MediaMetadataBase):
-    """Schema for creating media metadata"""
+class MediaInfoCreate(MediaInfoBase):
+    """Schema for creating media information"""
     media_file_id: int
 
 
-class MediaMetadataUpdate(MediaMetadataBase):
-    """Schema for updating media metadata"""
+class MediaInfoUpdate(MediaInfoBase):
+    """Schema for updating media information"""
     pass
 
 
-class MediaMetadata(MediaMetadataBase):
-    """Schema for media metadata response"""
+class MediaInfo(MediaInfoBase):
+    """Schema for media information response"""
     id: int
     media_file_id: int
     created_at: datetime
@@ -93,7 +93,7 @@ class MediaMetadata(MediaMetadataBase):
 
 class MediaFileWithMetadata(MediaFile):
     """Schema for media file with metadata"""
-    metadata: Optional[MediaMetadata] = None
+    media_metadata: Optional[MediaInfo] = None
 
 
 class TranscodedFileBase(BaseModel):

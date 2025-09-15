@@ -16,6 +16,9 @@ from app.core.database import engine, Base
 from app.api.v1.api import api_router
 from app.core.exceptions import Watch1Exception
 
+# Import models to register them with SQLAlchemy
+from app.models import user, media
+
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
