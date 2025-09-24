@@ -81,3 +81,6 @@ transcoded/
 deployment/*.tar
 watch1-*.tar
 watch1-*.zip
+"*.tar" 
+"*.zip" 
+"deployment/*.tar" 
