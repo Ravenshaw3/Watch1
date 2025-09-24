@@ -151,7 +151,6 @@
             v-for="media in recentMedia"
             :key="media.id"
             :media="media"
-            @click="viewMedia(media)"
           />
         </div>
       </div>
@@ -182,7 +181,7 @@ import { onMounted, computed } from 'vue'
 import { useRouter } from 'vue-router'
 import { useAuthStore } from '@/stores/auth'
 import { useMediaStore } from '@/stores/media'
-import MediaCard from '@/components/media/MediaCard.vue'
+import MediaCard from '@/components/MediaCardNew.vue'
 import {
   FilmIcon,
   PlayIcon,
@@ -204,10 +203,5 @@ onMounted(async () => {
   }
 })
 
-function viewMedia(media: any) {
-  router.push({
-    name: 'MediaDetail',
-    params: { id: media.id }
-  })
-}
+// Removed viewMedia function - MediaCard now handles navigation internally
 </script>

@@ -142,7 +142,7 @@ class MediaSearchRequest(BaseModel):
 
 class MediaSearchResponse(BaseModel):
     """Schema for media search response"""
-    items: List[MediaFileWithMetadata]
+    media: List[MediaFileWithMetadata]
     total: int
     page: int
     page_size: int

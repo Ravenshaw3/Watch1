@@ -1,0 +1,64 @@
+version: '3.8'
+
+services:
+  postgres:
+    image: postgres:15-alpine
+    container_name: watch1-postgres
+    environment:
+      POSTGRES_DB: watch1
+      POSTGRES_USER: watch1
+      POSTGRES_PASSWORD: watch1password
+    volumes:
+      - /mnt/user/appdata/watch1/postgres:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    restart: unless-stopped
+    networks:
+      - watch1-network
+
+  redis:
+    image: redis:7-alpine
+    container_name: watch1-redis
+    volumes:
+      - /mnt/user/appdata/watch1/redis:/data
+    ports:
+      - "6379:6379"
+    restart: unless-stopped
+    networks:
+      - watch1-network
+
+  backend:
+    build: ./backend
+    container_name: watch1-backend
+    environment:
+      DATABASE_URL: postgresql://watch1:watch1password@postgres:5432/watch1
+      REDIS_URL: redis://redis:6379/0
+      ENVIRONMENT: production
+    volumes:
+      - /mnt/user/appdata/watch1/data:/app/data
+      - /mnt/user/media:/app/media
+    ports:
+      - "8000:8000"
+    depends_on:
+      - postgres
+      - redis
+    restart: unless-stopped
+    networks:
+      - watch1-network
+
+  frontend:
+    build: ./frontend
+    container_name: watch1-frontend
+    environment:
+      VITE_API_URL: http://192.168.254.14:8000
+    ports:
+      - "3000:3000"
+    depends_on:
+      - backend
+    restart: unless-stopped
+    networks:
+      - watch1-network
+
+networks:
+  watch1-network:
+    driver: bridge

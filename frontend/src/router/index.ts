@@ -41,6 +41,18 @@ const router = createRouter({
               meta: { requiresAuth: true }
             },
             {
+              path: '/settings',
+              name: 'Settings',
+              component: () => import('@/views/Settings.vue'),
+              meta: { requiresAuth: true }
+            },
+            {
+              path: '/test',
+              name: 'StreamingTest',
+              component: () => import('@/views/StreamingTest.vue'),
+              meta: { requiresAuth: true }
+            },
+            {
               path: '/login',
               name: 'Login',
               component: () => import('@/views/Login.vue'),
@@ -55,14 +67,26 @@ const router = createRouter({
 })
 
 // Navigation guards
-router.beforeEach((to, _from, next) => {
+router.beforeEach(async (to, _from, next) => {
   const authStore = useAuthStore()
   
+  // Initialize auth store if not already done
+  if (authStore.token && !authStore.user) {
+    try {
+      await authStore.initialize()
+    } catch (error) {
+      console.error('Auth initialization failed during navigation:', error)
+    }
+  }
+  
   if (to.meta.requiresAuth && !authStore.isAuthenticated) {
+    console.log('Navigation blocked: Authentication required for', to.path)
     next('/login')
   } else if ((to.name === 'Login' || to.name === 'Register') && authStore.isAuthenticated) {
+    console.log('Navigation redirect: Already authenticated, redirecting to home')
     next('/')
   } else {
+    console.log('Navigation allowed to:', to.path)
     next()
   }
 })

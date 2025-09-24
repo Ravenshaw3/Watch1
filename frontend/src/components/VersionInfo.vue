@@ -49,9 +49,18 @@ import { mediaApi } from '@/api/media'
 import { InformationCircleIcon, XMarkIcon } from '@heroicons/vue/24/outline'
 
 const showDetails = ref(false)
-const version = ref('2.0.0')
-const buildDate = ref('')
-const features = ref<string[]>([])
+const version = ref('3.0.2')
+const buildDate = ref('2025-09-22')
+const features = ref<string[]>([
+  'Unraid Production Deployment Ready',
+  'CORS Policy Fixes',
+  'Permissions-Policy Headers',
+  'TypeScript Compatibility Resolved',
+  'Authentication System Working',
+  'Advanced Player Features',
+  'Subtitle Support',
+  'Picture-in-Picture Mode'
+])
 
 onMounted(async () => {
   try {

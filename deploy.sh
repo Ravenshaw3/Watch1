@@ -1,0 +1,141 @@
+#!/bin/bash
+
+# Watch1 Media Server Deployment Script for Unraid
+# This script deploys the Watch1 Media Server to your Unraid server
+
+set -e
+
+echo "🚀 Starting Watch1 Media Server deployment to Unraid..."
+
+# Configuration
+WATCH1_DIR="/mnt/user/appdata/watch1"
+DOCKER_COMPOSE_FILE="docker-compose.yml"
+
+# Colors for output
+RED='\033[0;31m'
+GREEN='\033[0;32m'
+YELLOW='\033[1;33m'
+BLUE='\033[0;34m'
+NC='\033[0m' # No Color
+
+# Function to print colored output
+print_status() {
+    echo -e "${BLUE}[INFO]${NC} $1"
+}
+
+print_success() {
+    echo -e "${GREEN}[SUCCESS]${NC} $1"
+}
+
+print_warning() {
+    echo -e "${YELLOW}[WARNING]${NC} $1"
+}
+
+print_error() {
+    echo -e "${RED}[ERROR]${NC} $1"
+}
+
+# Check if running as root
+if [ "$EUID" -ne 0 ]; then
+    print_error "Please run as root (use 'sudo' or run in Unraid terminal)"
+    exit 1
+fi
+
+# Create necessary directories
+print_status "Creating directories..."
+mkdir -p "$WATCH1_DIR/thumbnails"
+mkdir -p "$WATCH1_DIR/data"
+mkdir -p "$WATCH1_DIR/ssl"
+
+# Set proper permissions
+chmod 755 "$WATCH1_DIR"
+chmod 755 "$WATCH1_DIR/thumbnails"
+chmod 755 "$WATCH1_DIR/data"
+
+# Check if media directory exists
+if [ ! -d "/mnt/user/media" ]; then
+    print_warning "Media directory /mnt/user/media not found. Creating it..."
+    mkdir -p "/mnt/user/media"
+    chmod 755 "/mnt/user/media"
+else
+    print_success "Found existing media directory: /mnt/user/media"
+fi
+
+print_success "Directories created successfully"
+
+# Check if Docker is running
+if ! docker info > /dev/null 2>&1; then
+    print_error "Docker is not running. Please start Docker in Unraid."
+    exit 1
+fi
+
+# Check if docker-compose is available
+if ! command -v docker-compose &> /dev/null; then
+    print_error "docker-compose is not installed. Please install it in Unraid."
+    exit 1
+fi
+
+# Stop existing containers if running
+print_status "Stopping existing containers..."
+docker-compose -f "$DOCKER_COMPOSE_FILE" down --remove-orphans || true
+
+# Build and start containers
+print_status "Building and starting containers..."
+docker-compose -f "$DOCKER_COMPOSE_FILE" up --build -d
+
+# Wait for services to be ready
+print_status "Waiting for services to start..."
+sleep 30
+
+# Check if services are running
+print_status "Checking service health..."
+
+# Check backend
+if curl -f http://localhost:8000/health > /dev/null 2>&1; then
+    print_success "Backend service is healthy"
+else
+    print_warning "Backend service may not be ready yet"
+fi
+
+# Check frontend
+if curl -f http://localhost:3000 > /dev/null 2>&1; then
+    print_success "Frontend service is healthy"
+else
+    print_warning "Frontend service may not be ready yet"
+fi
+
+# Check nginx
+if curl -f http://localhost/health > /dev/null 2>&1; then
+    print_success "Nginx reverse proxy is healthy"
+else
+    print_warning "Nginx reverse proxy may not be ready yet"
+fi
+
+# Display access information
+echo ""
+print_success "🎉 Watch1 Media Server deployed successfully!"
+echo ""
+echo "📱 Access URLs:"
+echo "   Frontend: http://your-unraid-ip/"
+echo "   Backend API: http://your-unraid-ip/api/v1/"
+echo "   Direct Backend: http://your-unraid-ip:8000/"
+echo ""
+echo "🔐 Default Login:"
+echo "   Username: admin"
+echo "   Password: admin123"
+echo ""
+echo "📁 Media Directory: /mnt/user/media"
+echo "🖼️  Thumbnails Directory: $WATCH1_DIR/thumbnails"
+echo "💾 Data Directory: $WATCH1_DIR/data"
+echo ""
+echo "🛠️  Management Commands:"
+echo "   Stop: docker-compose -f $DOCKER_COMPOSE_FILE down"
+echo "   Start: docker-compose -f $DOCKER_COMPOSE_FILE up -d"
+echo "   Restart: docker-compose -f $DOCKER_COMPOSE_FILE restart"
+echo "   Logs: docker-compose -f $DOCKER_COMPOSE_FILE logs -f"
+echo "   Update: ./update.sh"
+echo ""
+
+# Show container status
+print_status "Container Status:"
+docker-compose -f "$DOCKER_COMPOSE_FILE" ps

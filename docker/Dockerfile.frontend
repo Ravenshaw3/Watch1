@@ -1,0 +1,31 @@
+# Watch1 Media Server v3.0.2 - Frontend Container  
+# Unraid Production Deployment Ready
+FROM node:18-alpine
+
+# Set working directory
+WORKDIR /app
+
+# Install curl for health checks
+RUN apk add --no-cache curl
+
+# Copy package files first for better caching
+COPY frontend/package*.json ./
+
+# Install dependencies
+RUN npm ci
+
+# Copy frontend code
+COPY frontend/ .
+
+# Create necessary directories
+RUN mkdir -p /app/dist /app/public
+
+# Health check
+HEALTHCHECK --interval=30s --timeout=10s --start-period=5s --retries=3 \
+    CMD curl -f http://localhost:3000 || exit 1
+
+# Expose port
+EXPOSE 3000
+
+# Development command (with hot reload)
+CMD ["npm", "run", "dev", "--", "--host", "0.0.0.0"]

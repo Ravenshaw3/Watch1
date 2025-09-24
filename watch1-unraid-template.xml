@@ -1,0 +1,71 @@
+<?xml version="1.0"?>
+<Container version="2">
+  <Name>Watch1</Name>
+  <Repository>watch1-backend:latest</Repository>
+  <Registry>https://hub.docker.com/</Registry>
+  <Network>bridge</Network>
+  <MyIP>192.168.254.14</MyIP>
+  <Shell>bash</Shell>
+  <Privileged>false</Privileged>
+  <Support>https://github.com/Ravenshaw3/Watch1</Support>
+  <Project>https://github.com/Ravenshaw3/Watch1</Project>
+  <Overview>Watch1 is a modern media server built with FastAPI and Vue.js. It provides a beautiful web interface for managing and streaming your media library with features like playlists, user management, and metadata extraction.</Overview>
+  <Category>MediaServer:Other</Category>
+  <WebUI>http://[IP]:[PORT:3000]</WebUI>
+  <TemplateURL/>
+  <Icon>https://raw.githubusercontent.com/Ravenshaw3/Watch1/main/docs/icon.png</Icon>
+  <ExtraParams/>
+  <PostArgs/>
+  <CPUset/>
+  <DateInstalled>1736900000</DateInstalled>
+  <DonateText/>
+  <DonateLink/>
+  <Description>Watch1 Media Server - A modern, self-hosted media streaming solution with a beautiful Vue.js frontend and powerful FastAPI backend.</Description>
+  <Networking>
+    <Mode>bridge</Mode>
+    <Publish>
+      <Port>
+        <HostPort>3000</HostPort>
+        <ContainerPort>3000</ContainerPort>
+        <Protocol>tcp</Protocol>
+      </Port>
+      <Port>
+        <HostPort>8000</HostPort>
+        <ContainerPort>8000</ContainerPort>
+        <Protocol>tcp</Protocol>
+      </Port>
+    </Publish>
+  </Networking>
+  <Data>
+    <Volume>
+      <HostDir>/mnt/user/appdata/watch1</HostDir>
+      <ContainerDir>/app/data</ContainerDir>
+      <Mode>rw</Mode>
+    </Volume>
+    <Volume>
+      <HostDir>/mnt/user/media</HostDir>
+      <ContainerDir>/app/media</ContainerDir>
+      <Mode>rw</Mode>
+    </Volume>
+  </Data>
+  <Environment>
+    <Variable>
+      <Value>postgresql://watch1:watch1password@192.168.254.14:5432/watch1</Value>
+      <Mode/>
+    </Variable>
+    <Variable>
+      <Value>redis://192.168.254.14:6379/0</Value>
+      <Mode/>
+    </Variable>
+    <Variable>
+      <Value>development</Value>
+      <Mode/>
+    </Variable>
+  </Environment>
+  <Labels/>
+  <Config Name="Database URL" Target="DATABASE_URL" Default="postgresql://watch1:watch1password@192.168.254.14:5432/watch1" Mode/> 
+  <Config Name="Redis URL" Target="REDIS_URL" Default="redis://192.168.254.14:6379/0" Mode/>
+  <Config Name="Environment" Target="ENVIRONMENT" Default="production" Mode/>
+  <Config Name="Media Directory" Target="MEDIA_DIR" Default="/mnt/user/media" Mode/>
+  <Config Name="Data Directory" Target="DATA_DIR" Default="/mnt/user/appdata/watch1" Mode/>
+</Container>

@@ -1,7 +1,7 @@
 {
   "name": "watch1-frontend",
-  "version": "3.0.1",
-  "description": "Watch1 Media Server Frontend v3.0.1 - Production Ready with Comprehensive Testing",
+  "version": "3.0.2",
+  "description": "Watch1 Media Server Frontend v3.0.2 - Unraid Production Deployment with All Fixes",
   "type": "module",
   "scripts": {
     "dev": "vite",

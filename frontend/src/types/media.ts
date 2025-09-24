@@ -1,11 +1,12 @@
 export interface MediaFile {
   id: string
   filename: string
-  original_filename: string
+  original_filename?: string
+  title?: string
   file_path: string
   file_size: number
-  mime_type: string
-  category: MediaCategory
+  mime_type?: string
+  category: string | MediaCategory
   duration?: number
   width?: number
   height?: number
@@ -17,7 +18,7 @@ export interface MediaFile {
   artwork?: string // Base64 encoded artwork
   metadata?: Record<string, any>
   created_at: string
-  uploaded_by: string
+  uploaded_by?: string
   last_accessed?: string
 }
 
@@ -64,7 +65,8 @@ export interface MediaSearchParams {
 }
 
 export interface MediaSearchResponse {
-  media: MediaFile[]
+  items: MediaFile[]
+  media?: MediaFile[] // For backward compatibility
   total: number
   page: number
   page_size: number

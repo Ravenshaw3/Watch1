@@ -10,6 +10,9 @@
     
     <!-- Footer -->
     <Footer />
+    
+    <!-- Debug Component (temporarily disabled due to build error) -->
+    <!-- <NavigationDebug v-if="isDevelopment" /> -->
   </div>
 </template>
 

@@ -14,24 +14,44 @@ export const useMediaStore = defineStore('media', () => {
   const searchQuery = ref('')
   const filters = ref<Partial<MediaSearchParams>>({})
 
-  // Getters
-  const videoFiles = computed(() => 
-    mediaFiles.value.filter(file => file.mime_type.startsWith('video/'))
-  )
+  // Getters with safe array access
+  const videoFiles = computed(() => {
+    const files = mediaFiles.value || []
+    return files.filter(file => 
+      file?.mime_type?.startsWith('video/') || 
+      file?.category === 'movies' || 
+      file?.category === 'tv_shows' ||
+      (file?.filename && /\.(mp4|mkv|avi|mov|wmv|flv|webm)$/i.test(file.filename))
+    )
+  })
   
-  const audioFiles = computed(() => 
-    mediaFiles.value.filter(file => file.mime_type.startsWith('audio/'))
-  )
+  const audioFiles = computed(() => {
+    const files = mediaFiles.value || []
+    return files.filter(file => 
+      file?.mime_type?.startsWith('audio/') ||
+      file?.category === 'music_videos' ||
+      (file?.filename && /\.(mp3|wav|flac|aac|ogg|m4a)$/i.test(file.filename))
+    )
+  })
   
-  const imageFiles = computed(() => 
-    mediaFiles.value.filter(file => file.mime_type.startsWith('image/'))
-  )
+  const imageFiles = computed(() => {
+    const files = mediaFiles.value || []
+    return files.filter(file => 
+      file?.mime_type?.startsWith('image/') ||
+      (file?.filename && /\.(jpg|jpeg|png|gif|bmp|webp|svg)$/i.test(file.filename))
+    )
+  })
 
-  const recentFiles = computed(() => 
-    [...mediaFiles.value]
-      .sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime())
+  const recentFiles = computed(() => {
+    const files = mediaFiles.value || []
+    return [...files]
+      .sort((a, b) => {
+        const dateA = a?.created_at ? new Date(a.created_at).getTime() : 0
+        const dateB = b?.created_at ? new Date(b.created_at).getTime() : 0
+        return dateB - dateA
+      })
       .slice(0, 20)
-  )
+  })
 
   // Actions
   async function fetchMediaFiles(params: Partial<MediaSearchParams> = {}) {
@@ -44,10 +64,12 @@ export const useMediaStore = defineStore('media', () => {
         ...params
       })
       
+      const items = response.items || response.media || []
       if (params.page === 1 || !params.page) {
-        mediaFiles.value = response.media
+        mediaFiles.value = Array.isArray(items) ? items : []
       } else {
-        mediaFiles.value.push(...response.media)
+        const currentFiles = mediaFiles.value || []
+        mediaFiles.value = [...currentFiles, ...(Array.isArray(items) ? items : [])]
       }
       
       searchResults.value = response
@@ -84,7 +106,8 @@ export const useMediaStore = defineStore('media', () => {
         ...params
       })
       
-      mediaFiles.value = response.media
+      const items = response.items || response.media || []
+      mediaFiles.value = Array.isArray(items) ? items : []
       searchResults.value = response
       totalPages.value = Math.ceil(response.total / response.page_size)
       currentPage.value = 1
@@ -115,7 +138,8 @@ export const useMediaStore = defineStore('media', () => {
     try {
       await mediaApi.deleteMediaFile(id.toString())
       // Remove from local state
-      mediaFiles.value = mediaFiles.value.filter(file => file.id !== id.toString())
+      const currentFiles = mediaFiles.value || []
+      mediaFiles.value = currentFiles.filter(file => file?.id !== id.toString())
       if (currentMedia.value?.id === id.toString()) {
         currentMedia.value = null
       }

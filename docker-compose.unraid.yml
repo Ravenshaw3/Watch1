@@ -1,0 +1,82 @@
+
+
+services:
+  watch1-backend:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile.backend
+    image: watch1-backend:latest
+    container_name: watch1-backend
+    restart: unless-stopped
+    ports:
+      - "8000:8000"
+    volumes:
+      - /mnt/user/media:/app/media
+      - /mnt/user/media:/app/T:ro
+      - /mnt/user/appdata/watch1/thumbnails:/app/thumbnails
+      - /mnt/user/appdata/watch1/data:/app/data
+      - /mnt/user/appdata/watch1/logs:/app/logs
+    environment:
+      - PYTHONUNBUFFERED=1
+      - FLASK_ENV=production
+      - MEDIA_ROOT=/app/media
+      - THUMBNAILS_ROOT=/app/thumbnails
+      - DATA_ROOT=/app/data
+      - JWT_SECRET_KEY=prod-jwt-secret-key-change-this
+      - CORS_ORIGINS=http://localhost:3000,http://127.0.0.1:3000,http://192.168.254.14:3000,http://watch1-frontend:3000
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/api/v1/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+    networks:
+      - watch1-network
+
+  watch1-frontend:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile.frontend
+    image: watch1-frontend:latest
+    container_name: watch1-frontend
+    restart: unless-stopped
+    ports:
+      - "3000:3000"
+    environment:
+      - VITE_API_URL=http://192.168.254.14:8000/api/v1
+      - NODE_ENV=production
+    depends_on:
+      - watch1-backend
+    networks:
+      - watch1-network
+
+  watch1-nginx:
+    image: nginx:alpine
+    container_name: watch1-nginx
+    restart: unless-stopped
+    ports:
+      - "80:80"
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+    depends_on:
+      - watch1-backend
+      - watch1-frontend
+    networks:
+      - watch1-network
+
+  watch1-db:
+    image: postgres:15
+    container_name: watch1-db
+    restart: unless-stopped
+    environment:
+      - POSTGRES_DB=watch1
+      - POSTGRES_USER=watch1_user
+      - POSTGRES_PASSWORD=watch1_password
+    volumes:
+      - /mnt/user/appdata/watch1/postgres_data:/var/lib/postgresql/data
+    networks:
+      - watch1-network
+
+networks:
+  watch1-network:
+    driver: bridge
+

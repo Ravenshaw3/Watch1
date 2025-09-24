@@ -29,7 +29,7 @@
       </div>
 
       <!-- Empty State -->
-      <div v-else-if="playlists.length === 0" class="text-center py-12">
+      <div v-else-if="safePlaylistsArray.length === 0" class="text-center py-12">
         <MusicalNoteIcon class="h-16 w-16 text-gray-400 mx-auto mb-4" />
         <h3 class="text-lg font-medium text-gray-900 mb-2">
           No playlists found
@@ -45,8 +45,8 @@
       <!-- Playlists Grid -->
       <div v-else class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         <div
-          v-for="playlist in playlists"
-          :key="playlist.id"
+          v-for="playlist in safePlaylistsArray"
+          :key="playlist?.id || `playlist-${Math.random()}`"
           class="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow"
         >
           <!-- Playlist Header -->
@@ -54,9 +54,9 @@
             <div class="flex justify-between items-start mb-4">
               <div>
                 <h3 class="font-semibold text-lg text-gray-900">
-                  {{ playlist.name }}
+                  {{ playlist?.name || 'Untitled Playlist' }}
                 </h3>
-                <p v-if="playlist.description" class="text-sm text-gray-600 mt-1">
+                <p v-if="playlist?.description" class="text-sm text-gray-600 mt-1">
                   {{ playlist.description }}
                 </p>
               </div>
@@ -68,7 +68,7 @@
                   <PencilIcon class="h-4 w-4" />
                 </button>
                 <button
-                  @click="deletePlaylist(playlist.id)"
+                  @click="deletePlaylist(playlist?.id)"
                   class="text-gray-400 hover:text-red-600"
                 >
                   <TrashIcon class="h-4 w-4" />
@@ -77,8 +77,8 @@
             </div>
 
             <div class="flex items-center justify-between text-sm text-gray-500">
-              <span>{{ playlist.items.length }} items</span>
-              <span>{{ formatDate(playlist.updated_at) }}</span>
+              <span>{{ playlist?.items?.length || 0 }} items</span>
+              <span>{{ formatDate(playlist?.updated_at) }}</span>
             </div>
           </div>
 
@@ -237,7 +237,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, computed } from 'vue'
 import { mediaApi } from '@/api/media'
 import type { Playlist, PlaylistCreate, MediaFile } from '@/types/media'
 import { 
@@ -254,6 +254,11 @@ const playlists = ref<Playlist[]>([])
 const selectedPlaylist = ref<Playlist | null>(null)
 const playlistMedia = ref<MediaFile[]>([])
 const isLoading = ref(false)
+
+// Computed property to ensure safe array access
+const safePlaylistsArray = computed(() => {
+  return Array.isArray(playlists.value) ? playlists.value : []
+})
 const isCreating = ref(false)
 const showCreateModal = ref(false)
 
@@ -265,12 +270,40 @@ const newPlaylist = ref<PlaylistCreate>({
 
 async function loadPlaylists() {
   isLoading.value = true
+  
+  // Add timeout protection
+  const timeoutId = setTimeout(() => {
+    console.warn('Playlists loading timeout - forcing completion')
+    isLoading.value = false
+  }, 10000) // 10 second timeout
+  
   try {
-    playlists.value = await mediaApi.getPlaylists()
+    console.log('Loading playlists data...')
+    const result = await mediaApi.getPlaylists()
+    
+    // Ensure we always have an array - extra defensive programming
+    let playlistsArray: Playlist[] = []
+    
+    if (Array.isArray(result)) {
+      playlistsArray = result
+    } else if (result && Array.isArray((result as any).playlists)) {
+      playlistsArray = (result as any).playlists
+    } else {
+      console.warn('Unexpected playlists response format:', result)
+      playlistsArray = []
+    }
+    
+    // Double-check we have a valid array before assignment
+    playlists.value = Array.isArray(playlistsArray) ? playlistsArray : []
+    
+    console.log('Playlists loaded:', playlists.value.length)
   } catch (error) {
     console.error('Failed to load playlists:', error)
+    playlists.value = [] // Set empty array on error
   } finally {
+    clearTimeout(timeoutId)
     isLoading.value = false
+    console.log('Playlists loading completed')
   }
 }
 
@@ -288,7 +321,12 @@ async function createPlaylist() {
   }
 }
 
-async function deletePlaylist(playlistId: string) {
+async function deletePlaylist(playlistId?: string) {
+  if (!playlistId) {
+    console.error('Cannot delete playlist: No ID provided')
+    return
+  }
+  
   if (!confirm('Are you sure you want to delete this playlist?')) return
   
   try {
@@ -299,7 +337,12 @@ async function deletePlaylist(playlistId: string) {
   }
 }
 
-async function viewPlaylist(playlist: Playlist) {
+async function viewPlaylist(playlist?: Playlist) {
+  if (!playlist?.id) {
+    console.error('Cannot view playlist: Invalid playlist data')
+    return
+  }
+  
   selectedPlaylist.value = playlist
   try {
     const response = await mediaApi.getPlaylistMedia(playlist.id)
@@ -309,7 +352,12 @@ async function viewPlaylist(playlist: Playlist) {
   }
 }
 
-async function playPlaylist(playlist: Playlist) {
+async function playPlaylist(playlist?: Playlist) {
+  if (!playlist?.id) {
+    console.error('Cannot play playlist: Invalid playlist data')
+    return
+  }
+  
   try {
     const response = await mediaApi.getPlaylistMedia(playlist.id)
     if (response.media.length > 0) {
@@ -346,8 +394,13 @@ function editPlaylist(playlist: Playlist) {
   console.log('Edit playlist:', playlist)
 }
 
-function formatDate(dateString: string): string {
-  return new Date(dateString).toLocaleDateString()
+function formatDate(dateString?: string): string {
+  if (!dateString) return 'Unknown date'
+  try {
+    return new Date(dateString).toLocaleDateString()
+  } catch (error) {
+    return 'Invalid date'
+  }
 }
 
 function formatFileSize(bytes: number): string {

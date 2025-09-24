@@ -3,7 +3,7 @@ import type { User, LoginCredentials, RegisterData, AuthResponse, UserPreference
 
 export const authApi = {
   async login(credentials: LoginCredentials): Promise<AuthResponse> {
-    const response = await apiClient.post('/auth/login', credentials)
+    const response = await apiClient.post('/auth/login/access-token', credentials)
     return response.data
   },
 
@@ -13,7 +13,7 @@ export const authApi = {
   },
 
   async getCurrentUser(): Promise<User> {
-    const response = await apiClient.get('/auth/me')
+    const response = await apiClient.get('/users/me')
     return response.data
   },
 

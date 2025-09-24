@@ -25,20 +25,44 @@
           </div>
         </div>
         
+        <!-- Library Status Box -->
+        <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-4 mb-6">
+          <div class="flex items-center justify-between">
+            <div class="flex items-center space-x-6">
+              <div class="text-center">
+                <div class="text-2xl font-bold text-gray-900">{{ total }}</div>
+                <div class="text-sm text-gray-600">Total Files</div>
+              </div>
+              <div class="text-center">
+                <div class="text-2xl font-bold text-primary-600">{{ safeMediaArray.length }}</div>
+                <div class="text-sm text-gray-600">Showing</div>
+              </div>
+              <div class="text-center">
+                <div class="text-2xl font-bold text-green-600">{{ safeCategoriesArray.length }}</div>
+                <div class="text-sm text-gray-600">Categories</div>
+              </div>
+            </div>
+            <div class="text-right">
+              <div class="text-sm text-gray-600">Last Scan</div>
+              <div class="text-sm font-medium text-gray-900">{{ lastScanTime || 'Never' }}</div>
+            </div>
+          </div>
+        </div>
+        
         <!-- Category Tabs -->
         <div class="flex flex-wrap gap-2 mb-6">
           <button
-            v-for="category in categories"
-            :key="category.name"
-            @click="selectCategory(category.name)"
+            v-for="category in safeCategoriesArray"
+            :key="category?.name || `category-${Math.random()}`"
+            @click="selectCategory(category?.name)"
             :class="[
               'px-4 py-2 rounded-lg text-sm font-medium transition-colors',
-              selectedCategory === category.name
+              selectedCategory === category?.name
                 ? 'bg-primary-600 text-white'
                 : 'bg-white text-gray-700 hover:bg-gray-100 border border-gray-300'
             ]"
           >
-            {{ category.display_name }} ({{ category.count }})
+            {{ category?.display_name || 'Unknown' }} ({{ category?.count || 0 }})
           </button>
         </div>
         
@@ -106,10 +130,9 @@
       <div v-else>
         <div class="media-grid">
           <MediaCard
-            v-for="media in mediaStore.mediaFiles"
-            :key="media.id"
+            v-for="media in safeMediaArray"
+            :key="media?.id || `media-${Math.random()}`"
             :media="media"
-            @click="viewMedia(media)"
           />
         </div>
 
@@ -148,8 +171,8 @@
           </button>
         </div>
         
-        <!-- Results Info -->
-        <div class="text-center mt-4 text-sm text-gray-600">
+        <!-- Results Info - Always show when there are results -->
+        <div v-if="total > 0" class="text-center mt-4 text-sm text-gray-600">
           Showing {{ (currentPage - 1) * pageSize + 1 }} to {{ Math.min(currentPage * pageSize, total) }} of {{ total }} results
         </div>
       </div>
@@ -181,7 +204,7 @@
 import { ref, onMounted, computed, watch } from 'vue'
 import { useMediaStore } from '@/stores/media'
 import { mediaApi } from '@/api/media'
-import MediaCard from '@/components/media/MediaCard.vue'
+import MediaCard from '@/components/MediaCardNew.vue'
 import ScanInfo from '@/components/ScanInfo.vue'
 import { FilmIcon } from '@heroicons/vue/24/outline'
 import type { MediaCategory, MediaCategoryInfo } from '@/types/media'
@@ -201,9 +224,18 @@ const totalPages = ref(1)
 const isScanning = ref(false)
 const showUpload = ref(false)
 const selectedFile = ref<File | null>(null)
-const fileInput = ref<HTMLInputElement>()
+const fileInput = ref<HTMLInputElement | null>(null)
+const lastScanTime = ref<string>('')
 
 // Computed
+const safeCategoriesArray = computed(() => {
+  return Array.isArray(categories.value) ? categories.value : []
+})
+
+const safeMediaArray = computed(() => {
+  return Array.isArray(mediaStore.mediaFiles) ? mediaStore.mediaFiles : []
+})
+
 const visiblePages = computed(() => {
   const pages = []
   const start = Math.max(1, currentPage.value - 2)
@@ -228,9 +260,18 @@ const debouncedSearch = () => {
 async function loadCategories() {
   try {
     const response = await mediaApi.getMediaCategories()
-    categories.value = response.categories
+    // Ensure we always have a valid array
+    if (Array.isArray(response.categories)) {
+      categories.value = response.categories
+    } else if (Array.isArray(response)) {
+      categories.value = response
+    } else {
+      console.warn('Unexpected categories response format:', response)
+      categories.value = []
+    }
   } catch (error) {
     console.error('Failed to load categories:', error)
+    categories.value = []
   }
 }
 
@@ -245,15 +286,33 @@ async function loadMedia() {
       sort_order: sortOrder.value
     })
     
-    mediaStore.mediaFiles = response.media
-    total.value = response.total
-    totalPages.value = Math.ceil(response.total / pageSize.value)
+    // Handle different response formats safely
+    if (Array.isArray(response.items)) {
+      mediaStore.mediaFiles = response.items
+    } else if (Array.isArray(response.media)) {
+      mediaStore.mediaFiles = response.media
+    } else if (Array.isArray(response)) {
+      mediaStore.mediaFiles = response
+    } else {
+      console.warn('Unexpected media response format:', response)
+      mediaStore.mediaFiles = []
+    }
+    
+    total.value = response.total || 0
+    totalPages.value = Math.ceil((response.total || 0) / pageSize.value)
   } catch (error) {
     console.error('Failed to load media:', error)
+    mediaStore.mediaFiles = []
+    total.value = 0
+    totalPages.value = 1
   }
 }
 
-function selectCategory(category: string) {
+function selectCategory(category?: string) {
+  if (!category) {
+    console.warn('selectCategory called with invalid category:', category)
+    return
+  }
   selectedCategory.value = selectedCategory.value === category ? '' : category
   currentPage.value = 1
   applyFilters()
@@ -307,11 +366,7 @@ async function uploadFile() {
   }
 }
 
-function viewMedia(media: any) {
-  // For now, just open the media URL directly
-  const mediaUrl = `http://localhost:8000/media/${media.filename}`
-  window.open(mediaUrl, '_blank')
-}
+// Removed viewMedia function - MediaCard now handles navigation internally
 
 // Lifecycle
 onMounted(async () => {

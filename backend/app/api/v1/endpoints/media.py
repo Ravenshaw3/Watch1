@@ -2,13 +2,16 @@
 Media management API endpoints
 """
 
-from fastapi import APIRouter, Depends, HTTPException, UploadFile, File, Query, status
-from sqlalchemy.ext.asyncio import AsyncSession
-from typing import List, Optional
 import os
 import hashlib
 import aiofiles
 from pathlib import Path
+from typing import Optional
+
+from fastapi import APIRouter, Depends, HTTPException, UploadFile, File, Query, status
+from fastapi.responses import FileResponse
+from sqlalchemy.ext.asyncio import AsyncSession
+from sqlalchemy import select, func
 
 from app.core.database import get_db
 from app.core.config import settings
@@ -68,7 +71,7 @@ async def get_media_files(
     total_pages = (total + page_size - 1) // page_size
     
     return MediaSearchResponse(
-        items=media_files,
+        media=media_files,
         total=total,
         page=page,
         page_size=page_size,
@@ -85,11 +88,19 @@ async def get_media_file(
     from sqlalchemy import select
     from sqlalchemy.orm import selectinload
     
+    print(f"Backend: Looking for media file with ID: {file_id} (type: {type(file_id)})")
+    
     stmt = select(MediaFile).options(selectinload(MediaFile.media_metadata)).where(MediaFile.id == file_id)
     result = await db.execute(stmt)
     media_file = result.scalar_one_or_none()
     
+    print(f"Backend: Found media file: {media_file}")
+    
     if not media_file:
+        # Let's also check what media files exist
+        all_files = await db.execute(select(MediaFile.id, MediaFile.filename).limit(5))
+        existing_files = all_files.fetchall()
+        print(f"Backend: Available media file IDs: {[f.id for f in existing_files]}")
         raise MediaFileNotFound(str(file_id))
     
     return media_file
@@ -192,6 +203,54 @@ async def delete_media_file(
     await db.commit()
     
     return {"message": "Media file deleted successfully"}
+
+
+@router.get("/scan-info")
+async def get_scan_info(
+    db: AsyncSession = Depends(get_db)
+):
+    """Get media scanning information"""
+    # Get total media count
+    total_count = await db.scalar(select(func.count(MediaFile.id)))
+    
+    # Get counts by category
+    category_counts = await db.execute(
+        select(MediaFile.category, func.count(MediaFile.id))
+        .group_by(MediaFile.category)
+    )
+    
+    categories = {}
+    for category, count in category_counts:
+        categories[category or 'other'] = count
+    
+    return {
+        "total_files": total_count or 0,
+        "categories": categories,
+        "last_scan": None,  # TODO: Add last scan timestamp
+        "scanning": False   # TODO: Add scanning status
+    }
+
+
+@router.get("/categories")
+async def get_categories(
+    db: AsyncSession = Depends(get_db)
+):
+    """Get available media categories"""
+    categories = await db.execute(
+        select(MediaFile.category, func.count(MediaFile.id))
+        .group_by(MediaFile.category)
+        .order_by(MediaFile.category)
+    )
+    
+    result = []
+    for category, count in categories:
+        result.append({
+            "name": category or 'other',
+            "count": count,
+            "display_name": (category or 'other').title()
+        })
+    
+    return result
 
 
 @router.get("/{file_id}/stream")

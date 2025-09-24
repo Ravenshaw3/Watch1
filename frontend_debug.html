@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Frontend 404 Debug Tool</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; background: #f5f5f5; }
+        .container { max-width: 1200px; margin: 0 auto; background: white; padding: 20px; border-radius: 8px; }
+        .section { margin: 20px 0; padding: 15px; border: 1px solid #ddd; border-radius: 5px; }
+        .success { background: #d4edda; border-color: #c3e6cb; color: #155724; }
+        .error { background: #f8d7da; border-color: #f5c6cb; color: #721c24; }
+        .warning { background: #fff3cd; border-color: #ffeaa7; color: #856404; }
+        .info { background: #d1ecf1; border-color: #bee5eb; color: #0c5460; }
+        button { padding: 10px 15px; margin: 5px; border: none; border-radius: 4px; cursor: pointer; }
+        .btn-primary { background: #007bff; color: white; }
+        .btn-secondary { background: #6c757d; color: white; }
+        pre { background: #f8f9fa; padding: 10px; border-radius: 4px; overflow-x: auto; }
+        .log { max-height: 300px; overflow-y: auto; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🔍 Frontend 404 Debug Tool</h1>
+        <p>This tool will help identify the exact cause of 404 errors in the frontend.</p>
+
+        <div class="section">
+            <h3>1. Authentication Test</h3>
+            <button class="btn-primary" onclick="testAuth()">Test Authentication</button>
+            <div id="auth-result"></div>
+        </div>
+
+        <div class="section">
+            <h3>2. API Endpoint Tests</h3>
+            <button class="btn-primary" onclick="testAllEndpoints()">Test All Endpoints</button>
+            <div id="endpoints-result"></div>
+        </div>
+
+        <div class="section">
+            <h3>3. Frontend Environment Check</h3>
+            <button class="btn-secondary" onclick="checkEnvironment()">Check Environment</button>
+            <div id="env-result"></div>
+        </div>
+
+        <div class="section">
+            <h3>4. Network Requests Monitor</h3>
+            <button class="btn-secondary" onclick="startMonitoring()">Start Monitoring</button>
+            <button class="btn-secondary" onclick="stopMonitoring()">Stop Monitoring</button>
+            <div id="monitor-result"></div>
+        </div>
+
+        <div class="section">
+            <h3>5. Debug Log</h3>
+            <button class="btn-secondary" onclick="clearLog()">Clear Log</button>
+            <div id="debug-log" class="log"></div>
+        </div>
+    </div>
+
+    <script>
+        let monitoring = false;
+        let originalFetch = window.fetch;
+
+        function log(message, type = 'info') {
+            const logDiv = document.getElementById('debug-log');
+            const timestamp = new Date().toLocaleTimeString();
+            const logEntry = document.createElement('div');
+            logEntry.className = type;
+            logEntry.innerHTML = `<strong>[${timestamp}]</strong> ${message}`;
+            logDiv.appendChild(logEntry);
+            logDiv.scrollTop = logDiv.scrollHeight;
+            console.log(`[${timestamp}] ${message}`);
+        }
+
+        function clearLog() {
+            document.getElementById('debug-log').innerHTML = '';
+        }
+
+        async function testAuth() {
+            const resultDiv = document.getElementById('auth-result');
+            resultDiv.innerHTML = '<p>Testing authentication...</p>';
+            
+            try {
+                log('Testing authentication...', 'info');
+                
+                const response = await fetch('http://localhost:8000/api/v1/auth/login/access-token', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        username: 'test@example.com',
+                        password: 'testpass123'
+                    })
+                });
+
+                if (response.ok) {
+                    const data = await response.json();
+                    const token = data.access_token;
+                    localStorage.setItem('access_token', token);
+                    
+                    resultDiv.innerHTML = `
+                        <div class="success">
+                            <h4>✅ Authentication Successful</h4>
+                            <p>Token stored in localStorage</p>
+                            <p>Token preview: ${token.substring(0, 50)}...</p>
+                        </div>
+                    `;
+                    log('Authentication successful', 'success');
+                    return token;
+                } else {
+                    throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+                }
+            } catch (error) {
+                resultDiv.innerHTML = `
+                    <div class="error">
+                        <h4>❌ Authentication Failed</h4>
+                        <p>Error: ${error.message}</p>
+                    </div>
+                `;
+                log(`Authentication failed: ${error.message}`, 'error');
+                return null;
+            }
+        }
+
+        async function testAllEndpoints() {
+            const resultDiv = document.getElementById('endpoints-result');
+            resultDiv.innerHTML = '<p>Testing endpoints...</p>';
+            
+            const token = localStorage.getItem('access_token');
+            if (!token) {
+                resultDiv.innerHTML = '<div class="warning">⚠️ No auth token found. Please test authentication first.</div>';
+                return;
+            }
+
+            const endpoints = [
+                { path: '/api/v1/media/categories', name: 'Media Categories' },
+                { path: '/api/v1/media/scan-info', name: 'Scan Info' },
+                { path: '/api/v1/media/', name: 'Media List' },
+                { path: '/api/v1/playlists/', name: 'Playlists' }
+            ];
+
+            let results = '<h4>Endpoint Test Results:</h4>';
+            
+            for (const endpoint of endpoints) {
+                try {
+                    log(`Testing ${endpoint.name}...`, 'info');
+                    
+                    const response = await fetch(`http://localhost:8000${endpoint.path}`, {
+                        headers: {
+                            'Authorization': `Bearer ${token}`,
+                            'Content-Type': 'application/json'
+                        }
+                    });
+
+                    if (response.ok) {
+                        const data = await response.json();
+                        results += `
+                            <div class="success">
+                                <strong>✅ ${endpoint.name}</strong><br>
+                                Status: ${response.status}<br>
+                                URL: ${response.url}<br>
+                                Data keys: ${Object.keys(data).join(', ')}
+                            </div>
+                        `;
+                        log(`${endpoint.name} - SUCCESS (${response.status})`, 'success');
+                    } else {
+                        results += `
+                            <div class="error">
+                                <strong>❌ ${endpoint.name}</strong><br>
+                                Status: ${response.status}<br>
+                                URL: ${response.url}<br>
+                                Error: ${response.statusText}
+                            </div>
+                        `;
+                        log(`${endpoint.name} - FAILED (${response.status})`, 'error');
+                    }
+                } catch (error) {
+                    results += `
+                        <div class="error">
+                            <strong>❌ ${endpoint.name}</strong><br>
+                            Network Error: ${error.message}
+                        </div>
+                    `;
+                    log(`${endpoint.name} - ERROR: ${error.message}`, 'error');
+                }
+            }
+
+            resultDiv.innerHTML = results;
+        }
+
+        function checkEnvironment() {
+            const resultDiv = document.getElementById('env-result');
+            
+            const envInfo = {
+                'Current URL': window.location.href,
+                'User Agent': navigator.userAgent,
+                'Local Storage Token': localStorage.getItem('access_token') ? 'Present' : 'Missing',
+                'Session Storage': Object.keys(sessionStorage).length + ' items',
+                'Cookies': document.cookie || 'None',
+                'Fetch Support': typeof fetch !== 'undefined' ? 'Yes' : 'No',
+                'Console Errors': 'Check browser console'
+            };
+
+            let envHtml = '<h4>Environment Information:</h4>';
+            for (const [key, value] of Object.entries(envInfo)) {
+                envHtml += `<p><strong>${key}:</strong> ${value}</p>`;
+            }
+
+            resultDiv.innerHTML = `<div class="info">${envHtml}</div>`;
+            log('Environment check completed', 'info');
+        }
+
+        function startMonitoring() {
+            if (monitoring) return;
+            
+            monitoring = true;
+            log('Started network monitoring', 'info');
+            
+            // Override fetch to monitor requests
+            window.fetch = async function(...args) {
+                const url = args[0];
+                const options = args[1] || {};
+                
+                log(`🌐 FETCH: ${url}`, 'info');
+                
+                try {
+                    const response = await originalFetch(...args);
+                    
+                    if (response.ok) {
+                        log(`✅ RESPONSE: ${url} -> ${response.status}`, 'success');
+                    } else {
+                        log(`❌ RESPONSE: ${url} -> ${response.status} ${response.statusText}`, 'error');
+                    }
+                    
+                    return response;
+                } catch (error) {
+                    log(`💥 FETCH ERROR: ${url} -> ${error.message}`, 'error');
+                    throw error;
+                }
+            };
+
+            document.getElementById('monitor-result').innerHTML = 
+                '<div class="info">🔍 Network monitoring active. All fetch requests will be logged.</div>';
+        }
+
+        function stopMonitoring() {
+            if (!monitoring) return;
+            
+            monitoring = false;
+            window.fetch = originalFetch;
+            log('Stopped network monitoring', 'info');
+            
+            document.getElementById('monitor-result').innerHTML = 
+                '<div class="warning">⏹️ Network monitoring stopped.</div>';
+        }
+
+        // Auto-start with some basic info
+        window.onload = function() {
+            log('Frontend 404 Debug Tool loaded', 'info');
+            checkEnvironment();
+        };
+    </script>
+</body>
+</html>

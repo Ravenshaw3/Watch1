@@ -1,0 +1,22 @@
+# SSH to your Unraid server and run these commands:
+
+ssh root@192.168.254.14
+
+# Navigate to the project directory
+cd /mnt/user/appdata/watch1
+
+# Create required directories
+mkdir -p data logs thumbnails
+
+# Build and deploy with docker-compose
+docker-compose -f docker-compose.unraid.yml up -d --build
+
+# Check deployment status
+docker-compose -f docker-compose.unraid.yml ps
+
+# View logs if needed
+docker-compose -f docker-compose.unraid.yml logs -f
+
+# Your media server will be available at:
+# http://192.168.254.14:3000
+# Login: test@example.com / testpass123

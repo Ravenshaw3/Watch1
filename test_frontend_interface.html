@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Watch1 Frontend Interface Test</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        .test-section { margin: 20px 0; padding: 15px; border: 1px solid #ccc; }
+        .success { color: green; }
+        .error { color: red; }
+        .info { color: blue; }
+        button { padding: 10px 15px; margin: 5px; }
+        #results { margin-top: 20px; }
+    </style>
+</head>
+<body>
+    <h1>Watch1 v3.0.1 - Frontend Interface Test</h1>
+    
+    <div class="test-section">
+        <h2>Authentication Test</h2>
+        <button onclick="testLogin()">Test Login</button>
+        <button onclick="testLogout()">Clear Token</button>
+        <div id="auth-result"></div>
+    </div>
+    
+    <div class="test-section">
+        <h2>API Endpoints Test</h2>
+        <button onclick="testLibrary()">Test Library</button>
+        <button onclick="testPlaylists()">Test Playlists</button>
+        <button onclick="testAnalytics()">Test Analytics</button>
+        <button onclick="testSettings()">Test Settings</button>
+        <div id="api-result"></div>
+    </div>
+    
+    <div class="test-section">
+        <h2>Frontend Navigation Test</h2>
+        <button onclick="testNavigation()">Test All Routes</button>
+        <div id="nav-result"></div>
+    </div>
+    
+    <div id="results"></div>
+
+    <script>
+        let token = localStorage.getItem('access_token');
+        
+        function log(message, type = 'info') {
+            const div = document.createElement('div');
+            div.className = type;
+            div.innerHTML = `[${new Date().toLocaleTimeString()}] ${message}`;
+            document.getElementById('results').appendChild(div);
+        }
+        
+        async function testLogin() {
+            const authResult = document.getElementById('auth-result');
+            authResult.innerHTML = 'Testing login...';
+            
+            try {
+                const response = await fetch('http://localhost:8000/api/v1/auth/login/access-token', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        username: 'test@example.com',
+                        password: 'testpass123'
+                    })
+                });
+                
+                if (response.ok) {
+                    const data = await response.json();
+                    token = data.access_token;
+                    localStorage.setItem('access_token', token);
+                    authResult.innerHTML = '<span class="success">✅ Login successful!</span>';
+                    log('Login successful', 'success');
+                } else {
+                    authResult.innerHTML = '<span class="error">❌ Login failed</span>';
+                    log('Login failed: ' + response.status, 'error');
+                }
+            } catch (error) {
+                authResult.innerHTML = '<span class="error">❌ Login error</span>';
+                log('Login error: ' + error.message, 'error');
+            }
+        }
+        
+        async function testApiEndpoint(endpoint, name) {
+            if (!token) {
+                log(`${name}: No token available`, 'error');
+                return false;
+            }
+            
+            try {
+                const response = await fetch(`http://localhost:8000/api/v1${endpoint}`, {
+                    headers: { 'Authorization': `Bearer ${token}` }
+                });
+                
+                if (response.ok) {
+                    const data = await response.json();
+                    log(`${name}: ✅ Working (${Object.keys(data).length} keys)`, 'success');
+                    return true;
+                } else {
+                    log(`${name}: ❌ Error ${response.status}`, 'error');
+                    return false;
+                }
+            } catch (error) {
+                log(`${name}: ❌ Failed - ${error.message}`, 'error');
+                return false;
+            }
+        }
+        
+        async function testLibrary() {
+            document.getElementById('api-result').innerHTML = 'Testing Library...';
+            await testApiEndpoint('/media/', 'Library');
+        }
+        
+        async function testPlaylists() {
+            await testApiEndpoint('/playlists/', 'Playlists');
+        }
+        
+        async function testAnalytics() {
+            await testApiEndpoint('/analytics/dashboard', 'Analytics');
+        }
+        
+        async function testSettings() {
+            await testApiEndpoint('/settings/', 'Settings');
+        }
+        
+        async function testNavigation() {
+            const navResult = document.getElementById('nav-result');
+            navResult.innerHTML = 'Testing navigation routes...';
+            
+            const routes = [
+                '/', '/library', '/playlists', '/analytics', '/settings'
+            ];
+            
+            let results = [];
+            for (const route of routes) {
+                try {
+                    const response = await fetch(`http://localhost:3000${route}`);
+                    const status = response.ok ? '✅' : '❌';
+                    results.push(`${route}: ${status}`);
+                } catch (error) {
+                    results.push(`${route}: ❌ Error`);
+                }
+            }
+            
+            navResult.innerHTML = results.join('<br>');
+        }
+        
+        function testLogout() {
+            localStorage.removeItem('access_token');
+            token = null;
+            document.getElementById('auth-result').innerHTML = 'Token cleared';
+            log('Token cleared', 'info');
+        }
+        
+        // Initial status
+        if (token) {
+            log('Found existing token in localStorage', 'info');
+        } else {
+            log('No token found - need to login first', 'info');
+        }
+    </script>
+</body>
+</html>

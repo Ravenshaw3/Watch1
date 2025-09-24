@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Library Posters</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; background: #f5f5f5; }
+        .container { max-width: 1200px; margin: 0 auto; background: white; padding: 20px; border-radius: 8px; }
+        .test-section { margin: 20px 0; padding: 15px; border: 1px solid #ddd; border-radius: 5px; }
+        .success { background: #d4edda; border-color: #c3e6cb; color: #155724; }
+        .error { background: #f8d7da; border-color: #f5c6cb; color: #721c24; }
+        .warning { background: #fff3cd; border-color: #ffeaa7; color: #856404; }
+        .info { background: #d1ecf1; border-color: #bee5eb; color: #0c5460; }
+        button { padding: 10px 15px; margin: 5px; border: none; border-radius: 4px; cursor: pointer; background: #007bff; color: white; }
+        .image-test { display: inline-block; margin: 10px; text-align: center; }
+        .image-test img { width: 150px; height: 225px; object-fit: cover; border: 1px solid #ddd; }
+        .image-test .label { margin-top: 5px; font-size: 12px; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Test Library Poster Display Fix</h1>
+        <p>This tool tests the poster display fix for Library.vue</p>
+
+        <div class="test-section info">
+            <h3>Instructions:</h3>
+            <ol>
+                <li>Click "Run Full Test" below</li>
+                <li>Check the results for poster loading</li>
+                <li>Open http://localhost:3000/library in another tab</li>
+                <li>Login and verify posters are displaying correctly</li>
+            </ol>
+        </div>
+
+        <div class="test-section">
+            <button onclick="runFullTest()">Run Full Test</button>
+            <button onclick="clearResults()">Clear Results</button>
+        </div>
+
+        <div id="results"></div>
+    </div>
+
+    <script>
+        let token = null;
+
+        function log(message, type = 'info') {
+            const results = document.getElementById('results');
+            const div = document.createElement('div');
+            div.className = `test-section ${type}`;
+            div.innerHTML = `<strong>[${new Date().toLocaleTimeString()}]</strong> ${message}`;
+            results.appendChild(div);
+            console.log(message);
+        }
+
+        function clearResults() {
+            document.getElementById('results').innerHTML = '';
+        }
+
+        async function runFullTest() {
+            clearResults();
+            log('Starting Library poster display test...', 'info');
+
+            // Step 1: Test authentication
+            try {
+                const response = await fetch('http://localhost:8000/api/v1/auth/login/access-token', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        username: 'test@example.com',
+                        password: 'testpass123'
+                    })
+                });
+
+                if (response.ok) {
+                    const data = await response.json();
+                    token = data.access_token;
+                    localStorage.setItem('access_token', token);
+                    log('✅ Authentication successful', 'success');
+                } else {
+                    throw new Error(`HTTP ${response.status}`);
+                }
+            } catch (error) {
+                log(`❌ Authentication failed: ${error.message}`, 'error');
+                return;
+            }
+
+            // Step 2: Test media API
+            try {
+                const response = await fetch('http://localhost:8000/api/v1/media/?limit=5', {
+                    headers: { 'Authorization': `Bearer ${token}` }
+                });
+
+                if (response.ok) {
+                    const data = await response.json();
+                    const items = data.items || [];
+                    log(`✅ Media API working: ${items.length} items found`, 'success');
+
+                    // Step 3: Test poster URLs
+                    let workingPosters = 0;
+                    let failedPosters = 0;
+
+                    for (let i = 0; i < items.length; i++) {
+                        const item = items[i];
+                        const posterUrl = `http://localhost:8000/api/v1/media/${item.id}/poster?token=${token}`;
+
+                        try {
+                            const posterResponse = await fetch(posterUrl, { timeout: 5000 });
+                            if (posterResponse.ok) {
+                                const contentType = posterResponse.headers.get('Content-Type');
+                                log(`✅ ${item.title}: Poster available (${contentType})`, 'success');
+                                workingPosters++;
+                            } else {
+                                log(`⚠️ ${item.title}: No poster (${posterResponse.status}) - will show placeholder`, 'warning');
+                                failedPosters++;
+                            }
+                        } catch (error) {
+                            log(`❌ ${item.title}: Poster error - ${error.message}`, 'error');
+                            failedPosters++;
+                        }
+                    }
+
+                    // Summary
+                    log(`📊 Poster Summary: ${workingPosters} working, ${failedPosters} failed`, 'info');
+                    
+                    if (workingPosters > 0) {
+                        log(`🎉 SUCCESS: ${workingPosters} posters should display in Library.vue!`, 'success');
+                    } else {
+                        log(`⚠️ No working posters found - all items will show FilmIcon placeholders`, 'warning');
+                    }
+
+                } else {
+                    throw new Error(`HTTP ${response.status}`);
+                }
+            } catch (error) {
+                log(`❌ Media API failed: ${error.message}`, 'error');
+                return;
+            }
+
+            // Step 4: Provide instructions
+            log(`🎯 Next Steps:`, 'info');
+            log(`1. Open http://localhost:3000/library in a new tab`, 'info');
+            log(`2. Login with test@example.com / testpass123`, 'info');
+            log(`3. Check if poster images are displaying in the grid`, 'info');
+            log(`4. Items without posters should show film icon placeholders`, 'info');
+            log(`5. Check browser console for "MediaCard: Image loaded successfully" messages`, 'info');
+
+            // Step 5: Technical details
+            log(`🔧 Technical Details:`, 'info');
+            log(`- MediaCardNew.vue updated with imageError state management`, 'info');
+            log(`- Poster URLs include authentication token as query parameter`, 'info');
+            log(`- Proper @load and @error event handlers implemented`, 'info');
+            log(`- Template conditionally shows image or FilmIcon placeholder`, 'info');
+            log(`- Watcher resets imageError when media item changes`, 'info');
+        }
+
+        // Auto-start message
+        window.onload = function() {
+            log('Library poster display test tool loaded', 'info');
+            log('Click "Run Full Test" to begin testing', 'info');
+        };
+    </script>
+</body>
+</html>

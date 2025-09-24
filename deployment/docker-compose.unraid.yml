@@ -1,0 +1,52 @@
+version: '3.8'
+
+services:
+  watch1-backend:
+    image: watch1-backend:latest
+    container_name: watch1-backend
+    restart: unless-stopped
+    ports:
+      - "8000:8000"
+    volumes:
+      - /mnt/user/media:/app/media
+      - /mnt/user/appdata/watch1/thumbnails:/app/thumbnails
+      - /mnt/user/appdata/watch1/data:/app/data
+    environment:
+      - PYTHONUNBUFFERED=1
+      - MEDIA_ROOT=/app/media
+      - THUMBNAILS_ROOT=/app/thumbnails
+      - DATA_ROOT=/app/data
+    networks:
+      - watch1-network
+
+  watch1-frontend:
+    image: watch1-frontend:latest
+    container_name: watch1-frontend
+    restart: unless-stopped
+    ports:
+      - "3000:3000"
+    environment:
+      - VITE_API_URL=http://watch1-backend:8000/api/v1
+      - NODE_ENV=production
+    depends_on:
+      - watch1-backend
+    networks:
+      - watch1-network
+
+  watch1-nginx:
+    image: nginx:alpine
+    container_name: watch1-nginx
+    restart: unless-stopped
+    ports:
+      - "80:80"
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+    depends_on:
+      - watch1-backend
+      - watch1-frontend
+    networks:
+      - watch1-network
+
+networks:
+  watch1-network:
+    driver: bridge

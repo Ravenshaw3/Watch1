@@ -28,13 +28,26 @@ export const mediaApi = {
     return response.data
   },
 
-  async getMediaFile(id: string): Promise<MediaFile> {
-    const response = await apiClient.get(`/media/${id}`)
+  async getMediaFile(id: string | number): Promise<MediaFile> {
+    console.log('API: Getting media file with ID:', id, 'Type:', typeof id)
+    try {
+      const response = await apiClient.get(`/media/${id}`)
+      console.log('API: Media file response:', response.data)
+      return response.data
+    } catch (error) {
+      console.error('API: Failed to get media file:', error)
+      console.error('API: Request URL was:', `/media/${id}`)
+      throw error
+    }
+  },
+
+  async getMediaCategories(): Promise<{ categories: MediaCategory[] }> {
+    const response = await apiClient.get<{ categories: MediaCategory[] }>('/media/categories')
     return response.data
   },
 
-  async getMediaCategories(): Promise<{ categories: MediaCategoryInfo[] }> {
-    const response = await apiClient.get('/media/categories')
+  async startScan(): Promise<any> {
+    const response = await apiClient.post('/media/scan')
     return response.data
   },
 
@@ -89,7 +102,7 @@ export const mediaApi = {
   // Playlist API
   async getPlaylists(): Promise<Playlist[]> {
     const response = await apiClient.get('/playlists')
-    return response.data
+    return response.data.playlists || []
   },
 
   async getPlaylist(id: string): Promise<Playlist> {
@@ -120,7 +133,7 @@ export const mediaApi = {
   },
 
   async getPlaylistMedia(playlistId: string): Promise<{ media: MediaFile[] }> {
-    const response = await apiClient.get(`/playlists/${playlistId}/media`)
+    const response = await apiClient.get(`/playlists/${playlistId}/items`)
     return response.data
   },
 }
