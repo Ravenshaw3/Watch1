@@ -1,0 +1,76 @@
+version: 1
+
+defaults:
+  # Applies when a category omits an attribute
+  media_type: video           # video | audio | image
+  storage_format: collection  # collection | series | group | item
+  include_patterns:
+    - "**/*"
+  exclude_patterns:
+    - "**/.DS_Store"
+    - "**/Thumbs.db"
+
+categories:
+  - key: movies
+    label: Movies
+    default: true
+    media_type: video
+    storage_format: collection
+    root_path: /app/media/Movies
+    ui:
+      icon: mdi-movie-open
+      color: "#ff9800"
+
+  - key: tv_series
+    label: TV Series
+    media_type: video
+    storage_format: series
+    root_path: /app/media/TV-Series
+    hierarchy:
+      levels:
+        - name: show
+        - name: season
+        - name: episode
+    playback:
+      default_mode: continuous
+    ui:
+      icon: mdi-television
+      color: "#3f51b5"
+
+  - key: music
+    label: Music
+    media_type: audio
+    storage_format: group
+    root_path: /app/media/Music
+    hierarchy:
+      levels:
+        - name: artist
+        - name: album
+        - name: track
+    include_patterns:
+      - "**/*.mp3"
+      - "**/*.flac"
+      - "**/*.m4a"
+    playback:
+      default_mode: continuous
+    ui:
+      icon: mdi-music
+      color: "#4caf50"
+
+  - key: photos
+    label: Photos
+    media_type: image
+    storage_format: collection
+    root_path: /app/media/Photos
+    include_patterns:
+      - "**/*.jpg"
+      - "**/*.jpeg"
+      - "**/*.png"
+      - "**/*.webp"
+    ui:
+      icon: mdi-image-multiple
+      color: "#9c27b0"
+
+validation:
+  # Toggle to enforce schema validation at startup
+  strict: true
