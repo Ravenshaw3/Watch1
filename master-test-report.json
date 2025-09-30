@@ -1,0 +1,837 @@
+{
+  "timestamp": "2025-09-29T19:20:11.517123",
+  "duration_seconds": 7.378612,
+  "summary": {
+    "total_test_suites": 3,
+    "successful_suites": 0,
+    "failed_suites": 3,
+    "success_rate": 0.0
+  },
+  "suite_results": {
+    "feature_mapping": {
+      "success": false,
+      "description": "Feature Mapping Validation",
+      "returncode": 1
+    },
+    "integration_tests": {
+      "success": false,
+      "description": "Comprehensive Integration Tests",
+      "returncode": 1
+    },
+    "frontend_backend": {
+      "success": false,
+      "description": "Frontend-Backend Integration Test",
+      "returncode": 1
+    }
+  },
+  "detailed_reports": {
+    "comprehensive": {
+      "timestamp": "2025-09-29T19:18:17.968541",
+      "summary": {
+        "total_tests": 15,
+        "passed": 15,
+        "failed": 0,
+        "skipped": 0,
+        "success_rate": 100.0
+      },
+      "categories": {
+        "Service": {
+          "pass": 2,
+          "fail": 0,
+          "skip": 0
+        },
+        "Auth": {
+          "pass": 2,
+          "fail": 0,
+          "skip": 0
+        },
+        "Media": {
+          "pass": 3,
+          "fail": 0,
+          "skip": 0
+        },
+        "Admin": {
+          "pass": 3,
+          "fail": 0,
+          "skip": 0
+        },
+        "Scan": {
+          "pass": 1,
+          "fail": 0,
+          "skip": 0
+        },
+        "Playlist": {
+          "pass": 1,
+          "fail": 0,
+          "skip": 0
+        },
+        "Settings": {
+          "pass": 1,
+          "fail": 0,
+          "skip": 0
+        },
+        "Analytics": {
+          "pass": 1,
+          "fail": 0,
+          "skip": 0
+        },
+        "System": {
+          "pass": 1,
+          "fail": 0,
+          "skip": 0
+        }
+      },
+      "performance": {
+        "avg_response_ms": 25.555999999999997,
+        "max_response_ms": 82.78
+      },
+      "detailed_results": [
+        {
+          "timestamp": "2025-09-29T19:18:17.487611",
+          "category": "Service",
+          "test_name": "Backend Health",
+          "status": "PASS",
+          "details": "Version: 3.0.4",
+          "response_time_ms": 26.27
+        },
+        {
+          "timestamp": "2025-09-29T19:18:17.500290",
+          "category": "Service",
+          "test_name": "Frontend Availability",
+          "status": "PASS",
+          "details": "Frontend accessible",
+          "response_time_ms": 10.33
+        },
+        {
+          "timestamp": "2025-09-29T19:18:17.523695",
+          "category": "Auth",
+          "test_name": "Login",
+          "status": "PASS",
+          "details": "Token received: eyJhbGciOiJIUzI1NiIs...",
+          "response_time_ms": 20.93
+        },
+        {
+          "timestamp": "2025-09-29T19:18:17.549398",
+          "category": "Auth",
+          "test_name": "User Profile",
+          "status": "PASS",
+          "details": "User: test@example.com, Admin: True",
+          "response_time_ms": 20.55
+        },
+        {
+          "timestamp": "2025-09-29T19:18:17.595412",
+          "category": "Media",
+          "test_name": "Media List",
+          "status": "PASS",
+          "details": "Found 14 media items",
+          "response_time_ms": 34.3
+        },
+        {
+          "timestamp": "2025-09-29T19:18:17.696426",
+          "category": "Media",
+          "test_name": "Categories",
+          "status": "PASS",
+          "details": "Categories: ['kids', 'movies', 'music', 'tv_shows', 'videos']",
+          "response_time_ms": 82.78
+        },
+        {
+          "timestamp": "2025-09-29T19:18:17.726080",
+          "category": "Media",
+          "test_name": "Scan Info",
+          "status": "PASS",
+          "details": "Total files: 14",
+          "response_time_ms": 26.33
+        },
+        {
+          "timestamp": "2025-09-29T19:18:17.749376",
+          "category": "Admin",
+          "test_name": "Database Info",
+          "status": "PASS",
+          "details": "DB Type: PostgreSQL",
+          "response_time_ms": 21.42
+        },
+        {
+          "timestamp": "2025-09-29T19:18:17.767833",
+          "category": "Admin",
+          "test_name": "Worker Health",
+          "status": "PASS",
+          "details": "Max workers: 4",
+          "response_time_ms": 17.23
+        },
+        {
+          "timestamp": "2025-09-29T19:18:17.788453",
+          "category": "Admin",
+          "test_name": "Job History",
+          "status": "PASS",
+          "details": "Jobs found: 1",
+          "response_time_ms": 18.82
+        },
+        {
+          "timestamp": "2025-09-29T19:18:17.819813",
+          "category": "Scan",
+          "test_name": "Media Scan",
+          "status": "PASS",
+          "details": "Found: 5, Added: 0, Dirs: 1",
+          "response_time_ms": 28.68
+        },
+        {
+          "timestamp": "2025-09-29T19:18:17.846389",
+          "category": "Playlist",
+          "test_name": "List Playlists",
+          "status": "PASS",
+          "details": "Found 0 playlists",
+          "response_time_ms": 23.35
+        },
+        {
+          "timestamp": "2025-09-29T19:18:17.865751",
+          "category": "Settings",
+          "test_name": "Get Settings",
+          "status": "PASS",
+          "details": "Settings: ['media_locations', 'playback', 'scanning', 'security', 'ui']",
+          "response_time_ms": 17.07
+        },
+        {
+          "timestamp": "2025-09-29T19:18:17.894317",
+          "category": "Analytics",
+          "test_name": "Dashboard",
+          "status": "PASS",
+          "details": "Metrics: ['activity', 'categories', 'overview', 'storage']",
+          "response_time_ms": 24.31
+        },
+        {
+          "timestamp": "2025-09-29T19:18:17.908191",
+          "category": "System",
+          "test_name": "Version Info",
+          "status": "PASS",
+          "details": "API Version: v1",
+          "response_time_ms": 10.97
+        }
+      ]
+    },
+    "feature_mapping": {
+      "timestamp": "2025-09-29T19:18:28.925986",
+      "summary": {
+        "total_validations": 80,
+        "passed": 80,
+        "failed": 0,
+        "warnings": 0
+      },
+      "feature_overview": {
+        "total_features": 6,
+        "features": {
+          "authentication": {
+            "routes": 2,
+            "endpoints": 2,
+            "dependencies": 0,
+            "requires_admin": false
+          },
+          "media_management": {
+            "routes": 3,
+            "endpoints": 4,
+            "dependencies": 1,
+            "requires_admin": false
+          },
+          "admin_maintenance": {
+            "routes": 1,
+            "endpoints": 5,
+            "dependencies": 1,
+            "requires_admin": true
+          },
+          "playlists": {
+            "routes": 1,
+            "endpoints": 4,
+            "dependencies": 2,
+            "requires_admin": false
+          },
+          "settings": {
+            "routes": 1,
+            "endpoints": 3,
+            "dependencies": 1,
+            "requires_admin": false
+          },
+          "analytics": {
+            "routes": 1,
+            "endpoints": 2,
+            "dependencies": 2,
+            "requires_admin": false
+          }
+        }
+      },
+      "validation_results": [
+        {
+          "feature": "authentication",
+          "test_type": "Mapping Structure",
+          "status": "PASS",
+          "details": "All required fields present",
+          "timestamp": "2025-09-29T19:18:28.603330"
+        },
+        {
+          "feature": "authentication",
+          "test_type": "Route Format",
+          "status": "PASS",
+          "details": "Valid route: /login",
+          "timestamp": "2025-09-29T19:18:28.622035"
+        },
+        {
+          "feature": "authentication",
+          "test_type": "Route Format",
+          "status": "PASS",
+          "details": "Valid route: /register",
+          "timestamp": "2025-09-29T19:18:28.631574"
+        },
+        {
+          "feature": "authentication",
+          "test_type": "Endpoint Format",
+          "status": "PASS",
+          "details": "Valid endpoint: POST /api/v1/auth/login/access-token",
+          "timestamp": "2025-09-29T19:18:28.633359"
+        },
+        {
+          "feature": "authentication",
+          "test_type": "Endpoint Format",
+          "status": "PASS",
+          "details": "Valid endpoint: GET /api/v1/users/me",
+          "timestamp": "2025-09-29T19:18:28.635846"
+        },
+        {
+          "feature": "media_management",
+          "test_type": "Mapping Structure",
+          "status": "PASS",
+          "details": "All required fields present",
+          "timestamp": "2025-09-29T19:18:28.651993"
+        },
+        {
+          "feature": "media_management",
+          "test_type": "Route Format",
+          "status": "PASS",
+          "details": "Valid route: /",
+          "timestamp": "2025-09-29T19:18:28.663722"
+        },
+        {
+          "feature": "media_management",
+          "test_type": "Route Format",
+          "status": "PASS",
+          "details": "Valid route: /library",
+          "timestamp": "2025-09-29T19:18:28.671692"
+        },
+        {
+          "feature": "media_management",
+          "test_type": "Route Format",
+          "status": "PASS",
+          "details": "Valid route: /tv-series",
+          "timestamp": "2025-09-29T19:18:28.674579"
+        },
+        {
+          "feature": "media_management",
+          "test_type": "Endpoint Format",
+          "status": "PASS",
+          "details": "Valid endpoint: GET /api/v1/media/",
+          "timestamp": "2025-09-29T19:18:28.678098"
+        },
+        {
+          "feature": "media_management",
+          "test_type": "Endpoint Format",
+          "status": "PASS",
+          "details": "Valid endpoint: GET /api/v1/media/categories",
+          "timestamp": "2025-09-29T19:18:28.679160"
+        },
+        {
+          "feature": "media_management",
+          "test_type": "Endpoint Format",
+          "status": "PASS",
+          "details": "Valid endpoint: GET /api/v1/media/scan-info",
+          "timestamp": "2025-09-29T19:18:28.679989"
+        },
+        {
+          "feature": "media_management",
+          "test_type": "Endpoint Format",
+          "status": "PASS",
+          "details": "Valid endpoint: POST /api/v1/media/scan",
+          "timestamp": "2025-09-29T19:18:28.717472"
+        },
+        {
+          "feature": "admin_maintenance",
+          "test_type": "Mapping Structure",
+          "status": "PASS",
+          "details": "All required fields present",
+          "timestamp": "2025-09-29T19:18:28.738813"
+        },
+        {
+          "feature": "admin_maintenance",
+          "test_type": "Route Format",
+          "status": "PASS",
+          "details": "Valid route: /admin/maintenance",
+          "timestamp": "2025-09-29T19:18:28.745362"
+        },
+        {
+          "feature": "admin_maintenance",
+          "test_type": "Endpoint Format",
+          "status": "PASS",
+          "details": "Valid endpoint: GET /api/v1/admin/database/info",
+          "timestamp": "2025-09-29T19:18:28.755018"
+        },
+        {
+          "feature": "admin_maintenance",
+          "test_type": "Endpoint Format",
+          "status": "PASS",
+          "details": "Valid endpoint: GET /api/v1/admin/worker/health",
+          "timestamp": "2025-09-29T19:18:28.770584"
+        },
+        {
+          "feature": "admin_maintenance",
+          "test_type": "Endpoint Format",
+          "status": "PASS",
+          "details": "Valid endpoint: GET /api/v1/admin/database/jobs",
+          "timestamp": "2025-09-29T19:18:28.773405"
+        },
+        {
+          "feature": "admin_maintenance",
+          "test_type": "Endpoint Format",
+          "status": "PASS",
+          "details": "Valid endpoint: POST /api/v1/admin/database/clean",
+          "timestamp": "2025-09-29T19:18:28.774894"
+        },
+        {
+          "feature": "admin_maintenance",
+          "test_type": "Endpoint Format",
+          "status": "PASS",
+          "details": "Valid endpoint: POST /api/v1/admin/database/backup",
+          "timestamp": "2025-09-29T19:18:28.778692"
+        },
+        {
+          "feature": "playlists",
+          "test_type": "Mapping Structure",
+          "status": "PASS",
+          "details": "All required fields present",
+          "timestamp": "2025-09-29T19:18:28.814769"
+        },
+        {
+          "feature": "playlists",
+          "test_type": "Route Format",
+          "status": "PASS",
+          "details": "Valid route: /playlists",
+          "timestamp": "2025-09-29T19:18:28.820623"
+        },
+        {
+          "feature": "playlists",
+          "test_type": "Endpoint Format",
+          "status": "PASS",
+          "details": "Valid endpoint: GET /api/v1/playlists/",
+          "timestamp": "2025-09-29T19:18:28.821452"
+        },
+        {
+          "feature": "playlists",
+          "test_type": "Endpoint Format",
+          "status": "PASS",
+          "details": "Valid endpoint: POST /api/v1/playlists/",
+          "timestamp": "2025-09-29T19:18:28.822098"
+        },
+        {
+          "feature": "playlists",
+          "test_type": "Endpoint Format",
+          "status": "PASS",
+          "details": "Valid endpoint: PUT /api/v1/playlists/{id}",
+          "timestamp": "2025-09-29T19:18:28.822489"
+        },
+        {
+          "feature": "playlists",
+          "test_type": "Endpoint Format",
+          "status": "PASS",
+          "details": "Valid endpoint: DELETE /api/v1/playlists/{id}",
+          "timestamp": "2025-09-29T19:18:28.822656"
+        },
+        {
+          "feature": "settings",
+          "test_type": "Mapping Structure",
+          "status": "PASS",
+          "details": "All required fields present",
+          "timestamp": "2025-09-29T19:18:28.825828"
+        },
+        {
+          "feature": "settings",
+          "test_type": "Route Format",
+          "status": "PASS",
+          "details": "Valid route: /settings",
+          "timestamp": "2025-09-29T19:18:28.826487"
+        },
+        {
+          "feature": "settings",
+          "test_type": "Endpoint Format",
+          "status": "PASS",
+          "details": "Valid endpoint: GET /api/v1/settings/",
+          "timestamp": "2025-09-29T19:18:28.827210"
+        },
+        {
+          "feature": "settings",
+          "test_type": "Endpoint Format",
+          "status": "PASS",
+          "details": "Valid endpoint: PUT /api/v1/settings/",
+          "timestamp": "2025-09-29T19:18:28.827614"
+        },
+        {
+          "feature": "settings",
+          "test_type": "Endpoint Format",
+          "status": "PASS",
+          "details": "Valid endpoint: GET /api/v1/settings/media-directories",
+          "timestamp": "2025-09-29T19:18:28.827947"
+        },
+        {
+          "feature": "analytics",
+          "test_type": "Mapping Structure",
+          "status": "PASS",
+          "details": "All required fields present",
+          "timestamp": "2025-09-29T19:18:28.828281"
+        },
+        {
+          "feature": "analytics",
+          "test_type": "Route Format",
+          "status": "PASS",
+          "details": "Valid route: /analytics",
+          "timestamp": "2025-09-29T19:18:28.828604"
+        },
+        {
+          "feature": "analytics",
+          "test_type": "Endpoint Format",
+          "status": "PASS",
+          "details": "Valid endpoint: GET /api/v1/analytics/dashboard",
+          "timestamp": "2025-09-29T19:18:28.828965"
+        },
+        {
+          "feature": "analytics",
+          "test_type": "Endpoint Format",
+          "status": "PASS",
+          "details": "Valid endpoint: GET /api/v1/analytics/activity",
+          "timestamp": "2025-09-29T19:18:28.829282"
+        },
+        {
+          "feature": "authentication",
+          "test_type": "Dependency Check",
+          "status": "PASS",
+          "details": "All dependencies exist: []",
+          "timestamp": "2025-09-29T19:18:28.855076"
+        },
+        {
+          "feature": "authentication",
+          "test_type": "Circular Dependency",
+          "status": "PASS",
+          "details": "No circular dependencies",
+          "timestamp": "2025-09-29T19:18:28.862130"
+        },
+        {
+          "feature": "media_management",
+          "test_type": "Dependency Check",
+          "status": "PASS",
+          "details": "All dependencies exist: ['authentication']",
+          "timestamp": "2025-09-29T19:18:28.863736"
+        },
+        {
+          "feature": "media_management",
+          "test_type": "Circular Dependency",
+          "status": "PASS",
+          "details": "No circular dependencies",
+          "timestamp": "2025-09-29T19:18:28.866459"
+        },
+        {
+          "feature": "admin_maintenance",
+          "test_type": "Dependency Check",
+          "status": "PASS",
+          "details": "All dependencies exist: ['authentication']",
+          "timestamp": "2025-09-29T19:18:28.867369"
+        },
+        {
+          "feature": "admin_maintenance",
+          "test_type": "Circular Dependency",
+          "status": "PASS",
+          "details": "No circular dependencies",
+          "timestamp": "2025-09-29T19:18:28.868297"
+        },
+        {
+          "feature": "playlists",
+          "test_type": "Dependency Check",
+          "status": "PASS",
+          "details": "All dependencies exist: ['authentication', 'media_management']",
+          "timestamp": "2025-09-29T19:18:28.868974"
+        },
+        {
+          "feature": "playlists",
+          "test_type": "Circular Dependency",
+          "status": "PASS",
+          "details": "No circular dependencies",
+          "timestamp": "2025-09-29T19:18:28.869828"
+        },
+        {
+          "feature": "settings",
+          "test_type": "Dependency Check",
+          "status": "PASS",
+          "details": "All dependencies exist: ['authentication']",
+          "timestamp": "2025-09-29T19:18:28.870610"
+        },
+        {
+          "feature": "settings",
+          "test_type": "Circular Dependency",
+          "status": "PASS",
+          "details": "No circular dependencies",
+          "timestamp": "2025-09-29T19:18:28.871338"
+        },
+        {
+          "feature": "analytics",
+          "test_type": "Dependency Check",
+          "status": "PASS",
+          "details": "All dependencies exist: ['authentication', 'media_management']",
+          "timestamp": "2025-09-29T19:18:28.872049"
+        },
+        {
+          "feature": "analytics",
+          "test_type": "Circular Dependency",
+          "status": "PASS",
+          "details": "No circular dependencies",
+          "timestamp": "2025-09-29T19:18:28.872541"
+        },
+        {
+          "feature": "admin_maintenance",
+          "test_type": "Link Consistency",
+          "status": "PASS",
+          "details": "All endpoints mapped for /admin/maintenance",
+          "timestamp": "2025-09-29T19:18:28.874583"
+        },
+        {
+          "feature": "media_management",
+          "test_type": "Link Consistency",
+          "status": "PASS",
+          "details": "All endpoints mapped for /library",
+          "timestamp": "2025-09-29T19:18:28.875267"
+        },
+        {
+          "feature": "settings",
+          "test_type": "Link Consistency",
+          "status": "PASS",
+          "details": "All endpoints mapped for /settings",
+          "timestamp": "2025-09-29T19:18:28.875584"
+        },
+        {
+          "feature": "authentication",
+          "test_type": "Kebab Case",
+          "status": "PASS",
+          "details": "Endpoint uses kebab-case: POST /api/v1/auth/login/access-token",
+          "timestamp": "2025-09-29T19:18:28.877367"
+        },
+        {
+          "feature": "authentication",
+          "test_type": "Kebab Case",
+          "status": "PASS",
+          "details": "Endpoint uses kebab-case: GET /api/v1/users/me",
+          "timestamp": "2025-09-29T19:18:28.877689"
+        },
+        {
+          "feature": "media_management",
+          "test_type": "Kebab Case",
+          "status": "PASS",
+          "details": "Endpoint uses kebab-case: GET /api/v1/media/",
+          "timestamp": "2025-09-29T19:18:28.878447"
+        },
+        {
+          "feature": "media_management",
+          "test_type": "Kebab Case",
+          "status": "PASS",
+          "details": "Endpoint uses kebab-case: GET /api/v1/media/categories",
+          "timestamp": "2025-09-29T19:18:28.878767"
+        },
+        {
+          "feature": "media_management",
+          "test_type": "Kebab Case",
+          "status": "PASS",
+          "details": "Endpoint uses kebab-case: GET /api/v1/media/scan-info",
+          "timestamp": "2025-09-29T19:18:28.879081"
+        },
+        {
+          "feature": "media_management",
+          "test_type": "Kebab Case",
+          "status": "PASS",
+          "details": "Endpoint uses kebab-case: POST /api/v1/media/scan",
+          "timestamp": "2025-09-29T19:18:28.879954"
+        },
+        {
+          "feature": "admin_maintenance",
+          "test_type": "Kebab Case",
+          "status": "PASS",
+          "details": "Endpoint uses kebab-case: GET /api/v1/admin/database/info",
+          "timestamp": "2025-09-29T19:18:28.880330"
+        },
+        {
+          "feature": "admin_maintenance",
+          "test_type": "Kebab Case",
+          "status": "PASS",
+          "details": "Endpoint uses kebab-case: GET /api/v1/admin/worker/health",
+          "timestamp": "2025-09-29T19:18:28.880747"
+        },
+        {
+          "feature": "admin_maintenance",
+          "test_type": "Kebab Case",
+          "status": "PASS",
+          "details": "Endpoint uses kebab-case: GET /api/v1/admin/database/jobs",
+          "timestamp": "2025-09-29T19:18:28.881051"
+        },
+        {
+          "feature": "admin_maintenance",
+          "test_type": "Kebab Case",
+          "status": "PASS",
+          "details": "Endpoint uses kebab-case: POST /api/v1/admin/database/clean",
+          "timestamp": "2025-09-29T19:18:28.881447"
+        },
+        {
+          "feature": "admin_maintenance",
+          "test_type": "Kebab Case",
+          "status": "PASS",
+          "details": "Endpoint uses kebab-case: POST /api/v1/admin/database/backup",
+          "timestamp": "2025-09-29T19:18:28.882356"
+        },
+        {
+          "feature": "playlists",
+          "test_type": "Kebab Case",
+          "status": "PASS",
+          "details": "Endpoint uses kebab-case: GET /api/v1/playlists/",
+          "timestamp": "2025-09-29T19:18:28.882704"
+        },
+        {
+          "feature": "playlists",
+          "test_type": "Kebab Case",
+          "status": "PASS",
+          "details": "Endpoint uses kebab-case: POST /api/v1/playlists/",
+          "timestamp": "2025-09-29T19:18:28.883350"
+        },
+        {
+          "feature": "playlists",
+          "test_type": "Kebab Case",
+          "status": "PASS",
+          "details": "Endpoint uses kebab-case: PUT /api/v1/playlists/{id}",
+          "timestamp": "2025-09-29T19:18:28.883850"
+        },
+        {
+          "feature": "playlists",
+          "test_type": "Kebab Case",
+          "status": "PASS",
+          "details": "Endpoint uses kebab-case: DELETE /api/v1/playlists/{id}",
+          "timestamp": "2025-09-29T19:18:28.884179"
+        },
+        {
+          "feature": "settings",
+          "test_type": "Kebab Case",
+          "status": "PASS",
+          "details": "Endpoint uses kebab-case: GET /api/v1/settings/",
+          "timestamp": "2025-09-29T19:18:28.885022"
+        },
+        {
+          "feature": "settings",
+          "test_type": "Kebab Case",
+          "status": "PASS",
+          "details": "Endpoint uses kebab-case: PUT /api/v1/settings/",
+          "timestamp": "2025-09-29T19:18:28.887573"
+        },
+        {
+          "feature": "settings",
+          "test_type": "Kebab Case",
+          "status": "PASS",
+          "details": "Endpoint uses kebab-case: GET /api/v1/settings/media-directories",
+          "timestamp": "2025-09-29T19:18:28.888141"
+        },
+        {
+          "feature": "analytics",
+          "test_type": "Kebab Case",
+          "status": "PASS",
+          "details": "Endpoint uses kebab-case: GET /api/v1/analytics/dashboard",
+          "timestamp": "2025-09-29T19:18:28.893729"
+        },
+        {
+          "feature": "analytics",
+          "test_type": "Kebab Case",
+          "status": "PASS",
+          "details": "Endpoint uses kebab-case: GET /api/v1/analytics/activity",
+          "timestamp": "2025-09-29T19:18:28.899061"
+        },
+        {
+          "feature": "admin_maintenance",
+          "test_type": "Admin Prefix",
+          "status": "PASS",
+          "details": "Admin endpoint properly prefixed: GET /api/v1/admin/database/info",
+          "timestamp": "2025-09-29T19:18:28.903344"
+        },
+        {
+          "feature": "admin_maintenance",
+          "test_type": "Admin Prefix",
+          "status": "PASS",
+          "details": "Admin endpoint properly prefixed: GET /api/v1/admin/worker/health",
+          "timestamp": "2025-09-29T19:18:28.904600"
+        },
+        {
+          "feature": "admin_maintenance",
+          "test_type": "Admin Prefix",
+          "status": "PASS",
+          "details": "Admin endpoint properly prefixed: GET /api/v1/admin/database/jobs",
+          "timestamp": "2025-09-29T19:18:28.906180"
+        },
+        {
+          "feature": "admin_maintenance",
+          "test_type": "Admin Prefix",
+          "status": "PASS",
+          "details": "Admin endpoint properly prefixed: POST /api/v1/admin/database/clean",
+          "timestamp": "2025-09-29T19:18:28.907569"
+        },
+        {
+          "feature": "admin_maintenance",
+          "test_type": "Admin Prefix",
+          "status": "PASS",
+          "details": "Admin endpoint properly prefixed: POST /api/v1/admin/database/backup",
+          "timestamp": "2025-09-29T19:18:28.908007"
+        },
+        {
+          "feature": "Performance",
+          "test_type": "Benchmark Realism",
+          "status": "PASS",
+          "details": "Realistic benchmark for /api/v1/health: 100ms",
+          "timestamp": "2025-09-29T19:18:28.914009"
+        },
+        {
+          "feature": "Performance",
+          "test_type": "Benchmark Realism",
+          "status": "PASS",
+          "details": "Realistic benchmark for /api/v1/auth/login/access-token: 1000ms",
+          "timestamp": "2025-09-29T19:18:28.914886"
+        },
+        {
+          "feature": "Performance",
+          "test_type": "Benchmark Realism",
+          "status": "PASS",
+          "details": "Realistic benchmark for /api/v1/media/: 2000ms",
+          "timestamp": "2025-09-29T19:18:28.915316"
+        },
+        {
+          "feature": "Performance",
+          "test_type": "Benchmark Realism",
+          "status": "PASS",
+          "details": "Realistic benchmark for /api/v1/media/scan: 30000ms",
+          "timestamp": "2025-09-29T19:18:28.915801"
+        },
+        {
+          "feature": "Performance",
+          "test_type": "Benchmark Realism",
+          "status": "PASS",
+          "details": "Realistic benchmark for /api/v1/admin/database/info: 500ms",
+          "timestamp": "2025-09-29T19:18:28.916455"
+        }
+      ]
+    }
+  },
+  "recommendations": {
+    "overall_status": "FAIL",
+    "failed_suites": [
+      "feature_mapping",
+      "integration_tests",
+      "frontend_backend"
+    ],
+    "next_actions": [
+      "Review individual test reports",
+      "Monitor performance metrics",
+      "Update test configurations as features evolve"
+    ]
+  }
+}

@@ -26,7 +26,8 @@ class MediaStreamingTester {
   private token: string | null
 
   constructor() {
-    this.baseUrl = import.meta.env?.VITE_API_URL || 'http://localhost:8000'
+    const env = (import.meta as any).env || {}
+    this.baseUrl = env.VITE_API_URL || 'http://localhost:8000'
     this.token = localStorage.getItem('access_token')
   }
 

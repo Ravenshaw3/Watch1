@@ -13,9 +13,12 @@
         <FilmIcon class="w-16 h-16 text-gray-400" />
       </div>
       
-      <!-- Play overlay -->
+      <!-- Play overlay with media type icon -->
       <div class="play-overlay">
-        <PlayIcon class="w-12 h-12 text-white" />
+        <PlayIcon v-if="isVideoMedia" class="w-12 h-12 text-white" />
+        <MusicalNoteIcon v-else-if="isAudioMedia" class="w-12 h-12 text-white" />
+        <PhotoIcon v-else-if="isImageMedia" class="w-12 h-12 text-white" />
+        <DocumentIcon v-else class="w-12 h-12 text-white" />
       </div>
       
       <!-- Add to Playlist button -->
@@ -80,9 +83,9 @@
 </template>
 
 <script setup lang="ts">
-import { computed, ref, watch } from 'vue'
+import { computed, ref } from 'vue'
 import { useRouter } from 'vue-router'
-import { FilmIcon, PlayIcon, PlusIcon, XMarkIcon } from '@heroicons/vue/24/outline'
+import { FilmIcon, PlayIcon, PlusIcon, XMarkIcon, MusicalNoteIcon, PhotoIcon, DocumentIcon } from '@heroicons/vue/24/outline'
 import { mediaApi } from '@/api/media'
 import type { MediaFile, Playlist } from '@/types/media'
 
@@ -152,6 +155,34 @@ const posterUrl = computed(() => {
   
   // Include token in URL for image requests (since img tags can't send headers)
   return `${cleanBaseUrl}/api/v1/media/${safeMedia.value.id}/poster?token=${token}`
+})
+
+// Media type detection
+const isVideoMedia = computed(() => {
+  const category = safeMedia.value?.category?.toLowerCase()
+  const filename = safeMedia.value?.filename?.toLowerCase() || ''
+  
+  return category === 'movies' || 
+         category === 'tv_shows' || 
+         category === 'kids' || 
+         category === 'videos' ||
+         /\.(mp4|avi|mkv|mov|wmv|flv|webm|m4v)$/i.test(filename)
+})
+
+const isAudioMedia = computed(() => {
+  const category = safeMedia.value?.category?.toLowerCase()
+  const filename = safeMedia.value?.filename?.toLowerCase() || ''
+  
+  return category === 'music' ||
+         /\.(mp3|wav|flac|aac|ogg|wma|m4a)$/i.test(filename)
+})
+
+const isImageMedia = computed(() => {
+  const category = safeMedia.value?.category?.toLowerCase()
+  const filename = safeMedia.value?.filename?.toLowerCase() || ''
+  
+  return category === 'photos' ||
+         /\.(jpg|jpeg|png|gif|bmp|webp|svg|tiff|ico)$/i.test(filename)
 })
 
 // Utility functions
@@ -261,20 +292,17 @@ function openAddToPlaylistModal() {
   loadPlaylists()
 }
 
-function onImageError(event: Event) {
+function onImageError() {
   console.warn('MediaCard: Image failed to load:', posterUrl.value)
   imageError.value = true
 }
 
-function onImageLoad(event: Event) {
+function onImageLoad() {
   console.log('MediaCard: Image loaded successfully:', posterUrl.value)
   imageError.value = false
 }
 
-// Reset image error when media changes
-watch(() => props.media?.id, () => {
-  imageError.value = false
-})
+// Image error reset handled in onImageLoad/onImageError
 </script>
 
 <style scoped>

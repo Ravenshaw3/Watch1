@@ -84,3 +84,18 @@ watch1-*.zip
 "*.tar" 
 "*.zip" 
 "deployment/*.tar" 
+# Docker Desktop Development (deprecated)
+docker-compose.dev.yml
+.env.local
+scripts/dev-*.ps1
+*.docker-desktop-backup
+
+# Unraid Development
+.env.unraid.dev
+unraid/secrets/
+
+# Development artifacts
+logs/
+thumbnails/
+uploads/
+*.log

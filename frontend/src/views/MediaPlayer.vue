@@ -88,7 +88,7 @@ import { ref, onMounted, computed } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { mediaApi } from '@/api/media'
 import { getMediaSubtitles, convertToSubtitleTracks } from '@/api/subtitles'
-import type { MediaFile, SubtitleInfo } from '@/types/media'
+import type { MediaFile, SubtitleInfo, MediaCategory } from '@/types/media'
 import EnhancedVideoPlayer from '@/components/player/EnhancedVideoPlayer.vue'
 import MediaCard from '@/components/MediaCardNew.vue'
 
@@ -152,10 +152,11 @@ async function loadRelatedMedia() {
   
   try {
     const response = await mediaApi.getMediaFiles({
-      category: media.value.category,
+      category: media.value.category as MediaCategory,
       page_size: 6
     })
-    relatedMedia.value = response.media.filter(m => m.id !== media.value?.id)
+    const mediaList = response.media ?? response.items ?? []
+    relatedMedia.value = mediaList.filter(m => m.id !== media.value?.id)
   } catch (error) {
     console.error('Failed to load related media:', error)
   }

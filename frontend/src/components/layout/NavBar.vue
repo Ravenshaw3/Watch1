@@ -47,6 +47,14 @@
                     >
                       Settings
                     </router-link>
+                    <router-link
+                      v-if="authStore.isAdmin"
+                      to="/admin/maintenance"
+                      class="text-gray-500 hover:text-gray-700 dark:text-gray-300 dark:hover:text-white px-3 py-2 rounded-md text-sm font-medium transition-colors"
+                      active-class="text-primary-600 dark:text-primary-400"
+                    >
+                      Admin
+                    </router-link>
                   </div>
         </div>
 
@@ -172,6 +180,14 @@
                   @click="showMobileMenu = false"
                 >
                   Analytics
+                </router-link>
+                <router-link
+                  v-if="authStore.isAdmin"
+                  to="/admin/maintenance"
+                  class="text-gray-500 hover:text-gray-700 dark:text-gray-300 dark:hover:text-white block px-3 py-2 rounded-md text-base font-medium"
+                  @click="showMobileMenu = false"
+                >
+                  Admin
                 </router-link>
               </div>
             </div>

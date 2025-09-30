@@ -1,154 +1,98 @@
-"""
-Authentication API endpoints
-"""
+from flask import Blueprint, jsonify, request
+from flask_jwt_extended import create_access_token, jwt_required, get_jwt_identity
+from datetime import timedelta
+import bcrypt
+import hashlib
+from postgres_config import get_db_connection
 
-from fastapi import APIRouter, Depends, HTTPException, status
-from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
-from sqlalchemy.ext.asyncio import AsyncSession
-from datetime import datetime, timedelta
-from typing import Optional
+router = Blueprint('auth', __name__)
 
-from app.core.database import get_db
-from app.core.config import settings
-from app.core.exceptions import AuthenticationError
-from app.models.user import User
-from app.schemas.user import UserCreate, UserResponse, Token
-
-router = APIRouter()
-oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/api/v1/auth/login")
-
-
-@router.post("/register", response_model=UserResponse)
-async def register_user(
-    user_data: UserCreate,
-    db: AsyncSession = Depends(get_db)
-):
-    """Register a new user"""
-    from sqlalchemy import select
-    from passlib.context import CryptContext
-    
-    pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
-    
-    # Check if user already exists
-    existing_user = await db.execute(
-        select(User).where(User.email == user_data.email)
-    )
-    if existing_user.scalar_one_or_none():
-        raise HTTPException(
-            status_code=status.HTTP_400_BAD_REQUEST,
-            detail="Email already registered"
-        )
-    
-    # Create new user
-    hashed_password = pwd_context.hash(user_data.password)
-    user = User(
-        username=user_data.username,
-        email=user_data.email,
-        hashed_password=hashed_password,
-        full_name=user_data.full_name
-    )
-    
-    db.add(user)
-    await db.commit()
-    await db.refresh(user)
-    
-    return user
-
-
-@router.post("/login", response_model=Token)
-async def login_user(
-    form_data: OAuth2PasswordRequestForm = Depends(),
-    db: AsyncSession = Depends(get_db)
-):
-    """Login user and return access token"""
-    from sqlalchemy import select
-    from passlib.context import CryptContext
-    from jose import JWTError, jwt
-    
-    pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
-    
-    # Get user by username or email
-    user = await db.execute(
-        select(User).where(
-            (User.username == form_data.username) | 
-            (User.email == form_data.username)
-        )
-    )
-    user = user.scalar_one_or_none()
-    
-    if not user or not pwd_context.verify(form_data.password, user.hashed_password):
-        raise AuthenticationError("Invalid username or password")
-    
-    if not user.is_active:
-        raise AuthenticationError("User account is disabled")
-    
-    # Create access token
-    access_token_expires = timedelta(minutes=settings.ACCESS_TOKEN_EXPIRE_MINUTES)
-    access_token = create_access_token(
-        data={"sub": str(user.id)}, 
-        expires_delta=access_token_expires
-    )
-    
-    # Update last login
-    user.last_login = datetime.utcnow()
-    await db.commit()
-    
-    return {
-        "access_token": access_token,
-        "token_type": "bearer",
-        "expires_in": settings.ACCESS_TOKEN_EXPIRE_MINUTES * 60
-    }
-
-
-@router.get("/me", response_model=UserResponse)
-async def get_current_user(
-    current_user: User = Depends(get_current_user_from_token)
-):
-    """Get current user information"""
-    return current_user
-
-
-def create_access_token(data: dict, expires_delta: Optional[timedelta] = None):
-    """Create JWT access token"""
-    from jose import jwt
-    
-    to_encode = data.copy()
-    if expires_delta:
-        expire = datetime.utcnow() + expires_delta
-    else:
-        expire = datetime.utcnow() + timedelta(minutes=15)
-    
-    to_encode.update({"exp": expire})
-    encoded_jwt = jwt.encode(to_encode, settings.SECRET_KEY, algorithm=settings.ALGORITHM)
-    return encoded_jwt
-
-
-async def get_current_user_from_token(
-    token: str = Depends(oauth2_scheme),
-    db: AsyncSession = Depends(get_db)
-) -> User:
-    """Get current user from JWT token"""
-    from sqlalchemy import select
-    from jose import JWTError, jwt
-    
-    credentials_exception = HTTPException(
-        status_code=status.HTTP_401_UNAUTHORIZED,
-        detail="Could not validate credentials",
-        headers={"WWW-Authenticate": "Bearer"},
-    )
-    
+@router.route('/login/access-token', methods=['POST'])
+def login():
+    '''Login endpoint'''
     try:
-        payload = jwt.decode(token, settings.SECRET_KEY, algorithms=[settings.ALGORITHM])
-        user_id: str = payload.get("sub")
-        if user_id is None:
-            raise credentials_exception
-    except JWTError:
-        raise credentials_exception
-    
-    user = await db.execute(select(User).where(User.id == int(user_id)))
-    user = user.scalar_one_or_none()
-    
-    if user is None:
-        raise credentials_exception
-    
-    return user
+        # Handle both JSON and form data safely
+        if request.is_json:
+            data = request.get_json() or {}
+        else:
+            data = request.form.to_dict()
+        
+        username = data.get('username', '').strip()
+        password = data.get('password', '').strip()
+        
+        if not username or not password:
+            return jsonify({"detail": "Username and password are required"}), 400
+        
+        conn = get_db_connection()
+        cursor = conn.cursor()
+        
+        # Get user by username or email
+        cursor.execute(
+            "SELECT id, email, password_hash, is_active, is_superuser FROM users WHERE email = %s",
+            (username,)
+        )
+        user = cursor.fetchone()
+        
+        if not user:
+            return jsonify({"detail": "Incorrect username or password"}), 401
+        
+        # Verify password using SHA256 (matching database format)
+        password_hash = hashlib.sha256(password.encode()).hexdigest()
+        if user['password_hash'] != password_hash:
+            return jsonify({"detail": "Incorrect username or password"}), 401
+        
+        if not user['is_active']:
+            return jsonify({"detail": "Account is inactive"}), 401
+        
+        # Create access token
+        access_token = create_access_token(
+            identity=str(user['id']),
+            expires_delta=timedelta(days=8)
+        )
+        
+        return jsonify({
+            "access_token": access_token,
+            "token_type": "bearer",
+            "user": {
+                "id": user['id'],
+                "email": user['email'],
+                "is_superuser": user['is_superuser']
+            }
+        })
+        
+    except Exception as e:
+        print(f"Login error: {e}")
+        return jsonify({"detail": f"Login error: {str(e)}"}), 500
+
+@router.route('/me', methods=['GET'])
+@jwt_required()
+def get_current_user():
+    '''Get current user info'''
+    try:
+        user_id = get_jwt_identity()
+        
+        conn = get_db_connection()
+        cursor = conn.cursor()
+        
+        cursor.execute(
+            "SELECT id, email, is_active, is_superuser, created_at FROM users WHERE id = %s",
+            (user_id,)
+        )
+        user = cursor.fetchone()
+        
+        if not user:
+            return jsonify({"detail": "User not found"}), 404
+        
+        return jsonify({
+            "id": user['id'],
+            "username": user['email'],  # Using email as username
+            "email": user['email'],
+            "full_name": user['email'],  # Using email as fallback
+            "is_active": user['is_active'],
+            "is_superuser": user['is_superuser'],
+            "created_at": user['created_at'].isoformat() if user['created_at'] else None
+        })
+        
+    except Exception as e:
+        print(f"Get current user error: {e}")
+        return jsonify({"detail": f"User error: {str(e)}"}), 500

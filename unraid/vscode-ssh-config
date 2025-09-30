@@ -1,0 +1,30 @@
+# VS Code Remote-SSH Configuration for Watch1 Unraid Development
+# Add this to your ~/.ssh/config file
+
+Host watch1-unraid
+    HostName 192.168.254.14  # Replace with your Unraid server IP
+    User watch1dev
+    Port 22
+    IdentityFile ~/.ssh/watch1_unraid_key  # Path to your SSH private key
+    ForwardAgent yes
+    ServerAliveInterval 60
+    ServerAliveCountMax 3
+    
+    # VS Code Remote Development optimizations
+    RemoteCommand cd /mnt/user/appdata/watch1-dev/Watch1
+    RequestTTY yes
+    
+    # Port forwarding for development
+    LocalForward 3000 localhost:3000  # Frontend
+    LocalForward 8000 localhost:8000  # Backend API
+    LocalForward 5432 localhost:5432  # PostgreSQL (optional)
+    LocalForward 6379 localhost:6379  # Redis (optional)
+
+# Alternative connection without port forwarding
+Host watch1-unraid-direct
+    HostName 192.168.254.14  # Replace with your Unraid server IP
+    User watch1dev
+    Port 22
+    IdentityFile ~/.ssh/watch1_unraid_key
+    ForwardAgent yes
+    ServerAliveInterval 60

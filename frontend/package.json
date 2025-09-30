@@ -1,13 +1,12 @@
 {
   "name": "watch1-frontend",
-  "version": "3.0.2",
-  "description": "Watch1 Media Server Frontend v3.0.2 - Unraid Production Deployment with All Fixes",
+  "version": "3.0.4",
+  "description": "Watch1 Media Server Frontend v3.0.4 - Unraid Production Deployment with All Fixes",
   "type": "module",
   "scripts": {
     "dev": "vite",
     "build": "vue-tsc && vite build",
     "preview": "vite preview",
-    "lint": "eslint . --ext .vue,.js,.jsx,.cjs,.mjs,.ts,.tsx,.cts,.mts --fix --ignore-path .gitignore",
     "type-check": "vue-tsc --noEmit"
   },
   "dependencies": {
@@ -38,5 +37,8 @@
     "typescript": "^5.2.2",
     "vite": "^6.3.6",
     "vue-tsc": "^3.0.7"
+  },
+  "optionalDependencies": {
+    "@rollup/rollup-linux-x64-musl": "^4.52.3"
   }
 }

@@ -1,0 +1,238 @@
+{
+  "timestamp": "2025-09-29T22:28:31.757138",
+  "summary": {
+    "total_tests": 21,
+    "passed": 19,
+    "failed": 1,
+    "skipped": 0,
+    "success_rate": 90.47619047619048
+  },
+  "categories": {
+    "Auth": {
+      "pass": 3,
+      "fail": 0,
+      "skip": 0,
+      "warn": 0,
+      "info": 0
+    },
+    "Database": {
+      "pass": 2,
+      "fail": 0,
+      "skip": 0,
+      "warn": 0,
+      "info": 0
+    },
+    "Frontend": {
+      "pass": 1,
+      "fail": 0,
+      "skip": 0,
+      "warn": 0,
+      "info": 0
+    },
+    "API": {
+      "pass": 6,
+      "fail": 0,
+      "skip": 0,
+      "warn": 0,
+      "info": 0
+    },
+    "Mount": {
+      "pass": 0,
+      "fail": 1,
+      "skip": 0,
+      "warn": 0,
+      "info": 0
+    },
+    "Storage": {
+      "pass": 1,
+      "fail": 0,
+      "skip": 0,
+      "warn": 1,
+      "info": 0
+    },
+    "Hierarchy": {
+      "pass": 4,
+      "fail": 0,
+      "skip": 0,
+      "warn": 0,
+      "info": 0
+    },
+    "Config": {
+      "pass": 2,
+      "fail": 0,
+      "skip": 0,
+      "warn": 0,
+      "info": 0
+    }
+  },
+  "results": [
+    {
+      "category": "Auth",
+      "test": "Login",
+      "status": "PASS",
+      "details": "Token received",
+      "response_time": 86.36021614074707,
+      "timestamp": "2025-09-29T22:28:30.685816"
+    },
+    {
+      "category": "Auth",
+      "test": "Login Flow",
+      "status": "PASS",
+      "details": "Complete flow working, user: test@example.com",
+      "response_time": 34.16085243225098,
+      "timestamp": "2025-09-29T22:28:30.955830"
+    },
+    {
+      "category": "Auth",
+      "test": "User Profile",
+      "status": "PASS",
+      "details": "Admin privileges: True",
+      "response_time": 180.23371696472168,
+      "timestamp": "2025-09-29T22:28:31.211967"
+    },
+    {
+      "category": "Database",
+      "test": "Population Status",
+      "status": "PASS",
+      "details": "14 items, 5 categories",
+      "response_time": 29.144287109375,
+      "timestamp": "2025-09-29T22:28:31.317015"
+    },
+    {
+      "category": "Database",
+      "test": "Data Quality",
+      "status": "PASS",
+      "details": "14 items have titles, 14 have file sizes",
+      "response_time": 0,
+      "timestamp": "2025-09-29T22:28:31.365653"
+    },
+    {
+      "category": "Frontend",
+      "test": "Accessibility",
+      "status": "PASS",
+      "details": "Frontend responsive, 649 chars, Vue+Watch1 detected",
+      "response_time": 13.541698455810547,
+      "timestamp": "2025-09-29T22:28:31.395011"
+    },
+    {
+      "category": "API",
+      "test": "Media List Endpoint",
+      "status": "PASS",
+      "details": "200 OK",
+      "response_time": 22.81665802001953,
+      "timestamp": "2025-09-29T22:28:31.443526"
+    },
+    {
+      "category": "API",
+      "test": "Categories Endpoint",
+      "status": "PASS",
+      "details": "200 OK",
+      "response_time": 35.43734550476074,
+      "timestamp": "2025-09-29T22:28:31.482880"
+    },
+    {
+      "category": "API",
+      "test": "Playlists Endpoint",
+      "status": "PASS",
+      "details": "200 OK",
+      "response_time": 32.193899154663086,
+      "timestamp": "2025-09-29T22:28:31.530291"
+    },
+    {
+      "category": "API",
+      "test": "Settings Endpoint",
+      "status": "PASS",
+      "details": "200 OK",
+      "response_time": 8.315801620483398,
+      "timestamp": "2025-09-29T22:28:31.541349"
+    },
+    {
+      "category": "API",
+      "test": "Analytics Endpoint",
+      "status": "PASS",
+      "details": "200 OK",
+      "response_time": 42.01984405517578,
+      "timestamp": "2025-09-29T22:28:31.586617"
+    },
+    {
+      "category": "API",
+      "test": "Endpoints Summary",
+      "status": "PASS",
+      "details": "All 5 endpoints working (100%)",
+      "response_time": 0,
+      "timestamp": "2025-09-29T22:28:31.588966"
+    },
+    {
+      "category": "Mount",
+      "test": "Unraid Media Access",
+      "status": "FAIL",
+      "details": "Unraid media mount not working - no files accessible",
+      "response_time": 0,
+      "timestamp": "2025-09-29T22:28:31.610454"
+    },
+    {
+      "category": "Storage",
+      "test": "Metadata Extraction",
+      "status": "WARN",
+      "details": "No enhanced metadata found",
+      "response_time": 0,
+      "timestamp": "2025-09-29T22:28:31.634367"
+    },
+    {
+      "category": "Storage",
+      "test": "Enhanced Scan",
+      "status": "PASS",
+      "details": "Total files: 0, Formats tested: 1",
+      "response_time": 19.925355911254883,
+      "timestamp": "2025-09-29T22:28:31.638512"
+    },
+    {
+      "category": "Hierarchy",
+      "test": "TV Series Structure",
+      "status": "PASS",
+      "details": "Found 2 TV show items",
+      "response_time": 0,
+      "timestamp": "2025-09-29T22:28:31.685635"
+    },
+    {
+      "category": "Hierarchy",
+      "test": "Music Group Structure",
+      "status": "PASS",
+      "details": "Found 1 music items",
+      "response_time": 0,
+      "timestamp": "2025-09-29T22:28:31.690223"
+    },
+    {
+      "category": "Hierarchy",
+      "test": "Year Extraction",
+      "status": "PASS",
+      "details": "10 items have year metadata",
+      "response_time": 0,
+      "timestamp": "2025-09-29T22:28:31.692769"
+    },
+    {
+      "category": "Hierarchy",
+      "test": "Media List",
+      "status": "PASS",
+      "details": "Retrieved 14 items",
+      "response_time": 36.216020584106445,
+      "timestamp": "2025-09-29T22:28:31.694012"
+    },
+    {
+      "category": "Config",
+      "test": "T: Drive Directories",
+      "status": "PASS",
+      "details": "Found 6 T: drive directories configured",
+      "response_time": 0,
+      "timestamp": "2025-09-29T22:28:31.717931"
+    },
+    {
+      "category": "Config",
+      "test": "Media Directories",
+      "status": "PASS",
+      "details": "Total directories: 6",
+      "response_time": 20.229339599609375,
+      "timestamp": "2025-09-29T22:28:31.728655"
+    }
+  ]
+}

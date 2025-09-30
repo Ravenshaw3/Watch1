@@ -327,43 +327,10 @@
       <div class="countdown-content">
         <div class="countdown-header">
           <h3>Up Next</h3>
-          <!-- Controls Overlay -->
-      <div class="controls-overlay" :class="{ 'visible': showControls }">
-        <!-- Top Controls -->
-        <div class="top-controls">
-          <div class="video-title">{{ videoTitle }}</div>
-          <div class="top-right-controls">
-            <button @click="toggleSubtitles" class="control-btn" title="Subtitles">
-              <span class="control-icon">CC</span>
-            </button>
-            <button @click="toggleQualityMenu" class="control-btn" title="Quality">
-              <span class="control-icon">HD</span>
-            </button>
-            <button @click="toggleSettings" class="control-btn" title="Settings">
-              <span class="control-icon">⚙</span>
-            </button>
-          </div>
         </div>
-        
-        <!-- Quality Selection Menu -->
-        <div v-if="showQualityMenu" class="quality-menu">
-          <div class="menu-header">Video Quality</div>
-          <div class="quality-options">
-            <button 
-              v-for="quality in availableQualities" 
-              :key="quality.value"
-              @click="selectQuality(quality.value)"
-              :class="['quality-option', { 'active': currentQuality === quality.value }]">
-              <span class="quality-label">{{ quality.label }}</span>
-              <span v-if="quality.value === 'auto'" class="quality-note">(Recommended)</span>
-              <span v-if="currentQuality === quality.value" class="checkmark">✓</span>
-            </button>
-          </div>
-        </div>
-        </div>
-        <button @click="cancelCountdown" class="countdown-btn cancel">Cancel</button>
-            <button @click="playNext" class="countdown-btn play">Play Now</button>
-          </div>
+        <div class="countdown-actions">
+          <button @click="cancelCountdown" class="countdown-btn cancel">Cancel</button>
+          <button @click="playNext" class="countdown-btn play">Play Now</button>
         </div>
       </div>
     </div>
@@ -371,7 +338,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, onMounted, onUnmounted, watch } from 'vue'
+import { ref, computed, onMounted, onUnmounted } from 'vue'
 
 interface Subtitle {
   src: string
@@ -793,13 +760,17 @@ const updateBufferProgress = () => {
   }
 }
 
-// Subtitle settings methods
-const openSubtitleSettings = () => {
-  showSubtitleSettings.value = true
-  showSubtitleMenu.value = false
-}
+// Subtitle changes handled in onMounted
+</script>
 
-const closeSubtitleSettings = () => {
+<style scoped>
+.advanced-video-player {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  background: #000;
+  border-radius: 8px;
+  overflow: hidden;
   showSubtitleSettings.value = false
 }
 
@@ -1085,19 +1056,6 @@ onUnmounted(() => {
   if (countdownInterval.value) {
     clearInterval(countdownInterval.value)
   }
-})
-
-// Watch for subtitle changes
-watch(() => props.subtitles, (newSubtitles) => {
-  if (newSubtitles.length > 0) {
-    selectedSubtitle.value = newSubtitles.findIndex(sub => sub.default) || 0
-  }
-}, { immediate: true })
-</script>
-
-<style scoped>
-.advanced-video-player {
-  position: relative;
   width: 100%;
   height: 100%;
   background: #000;
@@ -1697,16 +1655,16 @@ watch(() => props.subtitles, (newSubtitles) => {
 }
 
 .countdown-content {
-  background: rgba(0, 0, 0, 0.9);
+  background: rgba(0, 0, 0, 0.85);
+  padding: 24px;
   border-radius: 12px;
-  padding: 2rem;
   text-align: center;
   min-width: 300px;
   border: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 .countdown-header {
-  display: flex;
+{{ ... }}
   justify-content: space-between;
   align-items: center;
   margin-bottom: 1rem;

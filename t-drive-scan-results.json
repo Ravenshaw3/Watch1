@@ -1,0 +1,358 @@
+{
+  "timestamp": "2025-09-29T21:39:46.792320",
+  "total_files": 18509,
+  "categories": {
+    "movies": {
+      "path": "T:/Movies",
+      "storage_format": "collection",
+      "files_found": 732,
+      "files": [
+        {
+          "id": "049b6ef823265f33555bc0f8aba68ba1",
+          "filename": "Wild Hogs 2007 Bluray-1080p.mkv",
+          "file_path": "T:/Movies\\Wild Hogs (2007)\\Wild Hogs 2007 Bluray-1080p.mkv",
+          "file_size": 5223967914,
+          "category": "movies",
+          "storage_format": "collection",
+          "title": "Wild Hogs 2007 Bluray-1080p"
+        },
+        {
+          "id": "273b075e53bbfe2641d53779fd5de01b",
+          "filename": "The Wild 2006 Bluray-1080p.mkv",
+          "file_path": "T:/Movies\\The Wild (2006)\\The Wild 2006 Bluray-1080p.mkv",
+          "file_size": 4402949420,
+          "category": "movies",
+          "storage_format": "collection",
+          "title": "The Wild 2006 Bluray-1080p"
+        },
+        {
+          "id": "554155edc942f7665173697b8642c2e0",
+          "filename": "Animal Farm (1999).mkv",
+          "file_path": "T:/Movies\\Animal Farm (1999)\\Animal Farm (1999).mkv",
+          "file_size": 2011341585,
+          "category": "movies",
+          "storage_format": "collection",
+          "year": 1999,
+          "title": "Animal Farm"
+        },
+        {
+          "id": "5186d8980071c03f1fa21ab72ac405fc",
+          "filename": "Dracula 1931 Bluray-2160p.mkv",
+          "file_path": "T:/Movies\\Dracula (1931)\\Dracula 1931 Bluray-2160p.mkv",
+          "file_size": 20111280084,
+          "category": "movies",
+          "storage_format": "collection",
+          "title": "Dracula 1931 Bluray-2160p"
+        },
+        {
+          "id": "aee9c1379a1714103f24f5a24e5b9d9d",
+          "filename": "Pixels 2015 Bluray-1080p.mkv",
+          "file_path": "T:/Movies\\Pixels (2015)\\Pixels 2015 Bluray-1080p.mkv",
+          "file_size": 9481390614,
+          "category": "movies",
+          "storage_format": "collection",
+          "title": "Pixels 2015 Bluray-1080p"
+        }
+      ]
+    },
+    "tv_shows": {
+      "path": "T:/TV Shows",
+      "storage_format": "series",
+      "files_found": 3794,
+      "files": [
+        {
+          "id": "834e21a6bada6348198c9b4fabef0e20",
+          "filename": "A.Discovery.Of.Witches.S01E01.Episode.1.EAC3.5.1.1080p.Bluray.x265-iVy.mkv",
+          "file_path": "T:/TV Shows\\A Discovery of Witches\\Season 1\\A.Discovery.Of.Witches.S01E01.Episode.1.EAC3.5.1.1080p.Bluray.x265-iVy.mkv",
+          "file_size": 646486543,
+          "category": "tv_shows",
+          "storage_format": "series",
+          "title": "A Discovery Of Witches S01E01 Episode 1 EAC3 5 1 1080p Bluray x265-iVy",
+          "series": "A Discovery of Witches",
+          "season": "Season 1",
+          "season_number": 1,
+          "episode_number": 1
+        },
+        {
+          "id": "b01d6abc3870ce3ca60045b0474c0a1c",
+          "filename": "A.Discovery.Of.Witches.S01E02.Episode.2.EAC3.5.1.1080p.Bluray.x265-iVy.mkv",
+          "file_path": "T:/TV Shows\\A Discovery of Witches\\Season 1\\A.Discovery.Of.Witches.S01E02.Episode.2.EAC3.5.1.1080p.Bluray.x265-iVy.mkv",
+          "file_size": 617948435,
+          "category": "tv_shows",
+          "storage_format": "series",
+          "title": "A Discovery Of Witches S01E02 Episode 2 EAC3 5 1 1080p Bluray x265-iVy",
+          "series": "A Discovery of Witches",
+          "season": "Season 1",
+          "season_number": 1,
+          "episode_number": 2
+        },
+        {
+          "id": "dde78fcbf358dfe249429d034a64bc76",
+          "filename": "A.Discovery.Of.Witches.S01E03.Episode.3.EAC3.5.1.1080p.Bluray.x265-iVy.mkv",
+          "file_path": "T:/TV Shows\\A Discovery of Witches\\Season 1\\A.Discovery.Of.Witches.S01E03.Episode.3.EAC3.5.1.1080p.Bluray.x265-iVy.mkv",
+          "file_size": 566676579,
+          "category": "tv_shows",
+          "storage_format": "series",
+          "title": "A Discovery Of Witches S01E03 Episode 3 EAC3 5 1 1080p Bluray x265-iVy",
+          "series": "A Discovery of Witches",
+          "season": "Season 1",
+          "season_number": 1,
+          "episode_number": 3
+        },
+        {
+          "id": "e143f2e3090501e5147d9451570a5d9e",
+          "filename": "A.Discovery.Of.Witches.S01E04.Episode.4.EAC3.5.1.1080p.Bluray.x265-iVy.mkv",
+          "file_path": "T:/TV Shows\\A Discovery of Witches\\Season 1\\A.Discovery.Of.Witches.S01E04.Episode.4.EAC3.5.1.1080p.Bluray.x265-iVy.mkv",
+          "file_size": 536183548,
+          "category": "tv_shows",
+          "storage_format": "series",
+          "title": "A Discovery Of Witches S01E04 Episode 4 EAC3 5 1 1080p Bluray x265-iVy",
+          "series": "A Discovery of Witches",
+          "season": "Season 1",
+          "season_number": 1,
+          "episode_number": 4
+        },
+        {
+          "id": "2e3696fe262d4bcca9573e137140205b",
+          "filename": "A.Discovery.Of.Witches.S01E05.Episode.5.EAC3.5.1.1080p.Bluray.x265-iVy.mkv",
+          "file_path": "T:/TV Shows\\A Discovery of Witches\\Season 1\\A.Discovery.Of.Witches.S01E05.Episode.5.EAC3.5.1.1080p.Bluray.x265-iVy.mkv",
+          "file_size": 555174017,
+          "category": "tv_shows",
+          "storage_format": "series",
+          "title": "A Discovery Of Witches S01E05 Episode 5 EAC3 5 1 1080p Bluray x265-iVy",
+          "series": "A Discovery of Witches",
+          "season": "Season 1",
+          "season_number": 1,
+          "episode_number": 5
+        }
+      ]
+    },
+    "music": {
+      "path": "T:/Music",
+      "storage_format": "group",
+      "files_found": 13865,
+      "files": [
+        {
+          "id": "9514035ff5d550cc0d59cfaf2f5fe16e",
+          "filename": "01 - Caught Somewhere In Time.mp3",
+          "file_path": "T:/Music\\Somewhere In Time\\01 - Caught Somewhere In Time.mp3",
+          "file_size": 10700800,
+          "category": "music",
+          "storage_format": "group",
+          "title": "01 - Caught Somewhere In Time",
+          "artist": "Music",
+          "album": "Somewhere In Time",
+          "track_number": 1
+        },
+        {
+          "id": "3941354b5366876614a7c60b2e7c4ea8",
+          "filename": "02 - Wasted Years.mp3",
+          "file_path": "T:/Music\\Somewhere In Time\\02 - Wasted Years.mp3",
+          "file_size": 7383040,
+          "category": "music",
+          "storage_format": "group",
+          "title": "02 - Wasted Years",
+          "artist": "Music",
+          "album": "Somewhere In Time",
+          "track_number": 2
+        },
+        {
+          "id": "f665a8c609a8d28e8be2e0072ca783d3",
+          "filename": "03 - Sea Of Madness.mp3",
+          "file_path": "T:/Music\\Somewhere In Time\\03 - Sea Of Madness.mp3",
+          "file_size": 8208384,
+          "category": "music",
+          "storage_format": "group",
+          "title": "03 - Sea Of Madness",
+          "artist": "Music",
+          "album": "Somewhere In Time",
+          "track_number": 3
+        },
+        {
+          "id": "3c84e63efe8f5541a628afa8b978bb0c",
+          "filename": "04 - Heaven Can Wait.mp3",
+          "file_path": "T:/Music\\Somewhere In Time\\04 - Heaven Can Wait.mp3",
+          "file_size": 10596352,
+          "category": "music",
+          "storage_format": "group",
+          "title": "04 - Heaven Can Wait",
+          "artist": "Music",
+          "album": "Somewhere In Time",
+          "track_number": 4
+        },
+        {
+          "id": "3a1e8fde4ce51bb28cdb4840b083245c",
+          "filename": "05 - The Loneliness Of The Long Distance Runner.mp3",
+          "file_path": "T:/Music\\Somewhere In Time\\05 - The Loneliness Of The Long Distance Runner.mp3",
+          "file_size": 9394176,
+          "category": "music",
+          "storage_format": "group",
+          "title": "05 - The Loneliness Of The Long Distance Runner",
+          "artist": "Music",
+          "album": "Somewhere In Time",
+          "track_number": 5
+        }
+      ]
+    },
+    "kids": {
+      "path": "T:/Kids",
+      "storage_format": "collection",
+      "files_found": 47,
+      "files": [
+        {
+          "id": "85dda24bcdca9af02a4e44fa265d06e8",
+          "filename": "Aladdin 1992 Bluray-2160p.mkv",
+          "file_path": "T:/Kids\\Aladdin (1992)\\Aladdin 1992 Bluray-2160p.mkv",
+          "file_size": 8200150714,
+          "category": "kids",
+          "storage_format": "collection",
+          "title": "Aladdin 1992 Bluray-2160p"
+        },
+        {
+          "id": "454b4bb4516f3db19a758555bf735b74",
+          "filename": "Aladdin and the King of Thieves 1996 Bluray-1080p.mkv",
+          "file_path": "T:/Kids\\Aladdin and the King of Thieves (1996)\\Aladdin and the King of Thieves 1996 Bluray-1080p.mkv",
+          "file_size": 7970006982,
+          "category": "kids",
+          "storage_format": "collection",
+          "title": "Aladdin and the King of Thieves 1996 Bluray-1080p"
+        },
+        {
+          "id": "f47fb9d2f6dcb1c83657151a329be3f9",
+          "filename": "Alice in Wonderland 1951 Bluray-1080p.mkv",
+          "file_path": "T:/Kids\\Alice in Wonderland (1951)\\Alice in Wonderland 1951 Bluray-1080p.mkv",
+          "file_size": 2037553412,
+          "category": "kids",
+          "storage_format": "collection",
+          "title": "Alice in Wonderland 1951 Bluray-1080p"
+        },
+        {
+          "id": "5533cac014719e8a26b88c5beb5f293f",
+          "filename": "An American Tail 1986 Bluray-1080p.mkv",
+          "file_path": "T:/Kids\\An American Tail (1986)\\An American Tail 1986 Bluray-1080p.mkv",
+          "file_size": 3355503945,
+          "category": "kids",
+          "storage_format": "collection",
+          "title": "An American Tail 1986 Bluray-1080p"
+        },
+        {
+          "id": "a735f8a22933159e51c71ec1acdddfb3",
+          "filename": "An American Tail Fievel Goes West 1991 Bluray-1080p.mkv",
+          "file_path": "T:/Kids\\An American Tail Fievel Goes West (1991)\\An American Tail Fievel Goes West 1991 Bluray-1080p.mkv",
+          "file_size": 3124772430,
+          "category": "kids",
+          "storage_format": "collection",
+          "title": "An American Tail Fievel Goes West 1991 Bluray-1080p"
+        }
+      ]
+    },
+    "classic_movies": {
+      "path": "T:/Classic Movies",
+      "storage_format": "collection",
+      "files_found": 47,
+      "files": [
+        {
+          "id": "40d5121570542f684734567f7e85ee7b",
+          "filename": "20,000 Leagues Under the Sea 1954 Bluray-1080p.mkv",
+          "file_path": "T:/Classic Movies\\20,000 Leagues Under the Sea (1954)\\20,000 Leagues Under the Sea 1954 Bluray-1080p.mkv",
+          "file_size": 2441193945,
+          "category": "classic_movies",
+          "storage_format": "collection",
+          "title": "20,000 Leagues Under the Sea 1954 Bluray-1080p"
+        },
+        {
+          "id": "664e0fbd01c8af848e72bc9f5da6e9e1",
+          "filename": "20,000 Leagues Under the Sea (1996).mkv",
+          "file_path": "T:/Classic Movies\\20,000 Leagues Under the Sea (1996)\\20,000 Leagues Under the Sea (1996).mkv",
+          "file_size": 1690484414,
+          "category": "classic_movies",
+          "storage_format": "collection",
+          "year": 1996,
+          "title": "20,000 Leagues Under the Sea"
+        },
+        {
+          "id": "58be15d7720522ea27746f1f33054f0d",
+          "filename": "42nd Street 1933 Bluray-1080p.mkv",
+          "file_path": "T:/Classic Movies\\42nd Street (1933)\\42nd Street 1933 Bluray-1080p.mkv",
+          "file_size": 5488879663,
+          "category": "classic_movies",
+          "storage_format": "collection",
+          "title": "42nd Street 1933 Bluray-1080p"
+        },
+        {
+          "id": "e2990bc770bde5f7c34d5ef1f8610326",
+          "filename": "A Tree Grows in Brooklyn 1945 Bluray-1080p.mkv",
+          "file_path": "T:/Classic Movies\\A Tree Grows in Brooklyn (1945)\\A Tree Grows in Brooklyn 1945 Bluray-1080p.mkv",
+          "file_size": 1178640023,
+          "category": "classic_movies",
+          "storage_format": "collection",
+          "title": "A Tree Grows in Brooklyn 1945 Bluray-1080p"
+        },
+        {
+          "id": "ac1534a6b860ccc073916d155e509e3c",
+          "filename": "All About Eve (1950).mkv",
+          "file_path": "T:/Classic Movies\\All About Eve (1950)\\All About Eve (1950).mkv",
+          "file_size": 463233458,
+          "category": "classic_movies",
+          "storage_format": "collection",
+          "year": 1950,
+          "title": "All About Eve"
+        }
+      ]
+    },
+    "holiday_movies": {
+      "path": "T:/Holiday Movies",
+      "storage_format": "collection",
+      "files_found": 24,
+      "files": [
+        {
+          "id": "f5737eafcba751a6122fa88ae0c55eff",
+          "filename": "A Christmas Carol (1954).mkv",
+          "file_path": "T:/Holiday Movies\\A Christmas Carol (1953)\\A Christmas Carol (1954).mkv",
+          "file_size": 1174675442,
+          "category": "holiday_movies",
+          "storage_format": "collection",
+          "year": 1954,
+          "title": "A Christmas Carol"
+        },
+        {
+          "id": "0a02d954ebab6eddde24e4041dc3762a",
+          "filename": "A Christmas Wish (2011).mkv",
+          "file_path": "T:/Holiday Movies\\A Christmas Wish (2011)\\A Christmas Wish (2011).mkv",
+          "file_size": 67108864,
+          "category": "holiday_movies",
+          "storage_format": "collection",
+          "year": 2011,
+          "title": "A Christmas Wish"
+        },
+        {
+          "id": "70ee4de84a6d5a1d87d7980b38914e03",
+          "filename": "A Good Day to Die Hard 2013 WEBDL-2160p.mkv",
+          "file_path": "T:/Holiday Movies\\A Good Day to Die Hard (2013)\\A Good Day to Die Hard 2013 WEBDL-2160p.mkv",
+          "file_size": 15471604958,
+          "category": "holiday_movies",
+          "storage_format": "collection",
+          "title": "A Good Day to Die Hard 2013 WEBDL-2160p"
+        },
+        {
+          "id": "49f6700841844ca7f748181ec5e4af46",
+          "filename": "Die Hard 1988 Bluray-2160p.mkv",
+          "file_path": "T:/Holiday Movies\\Die Hard (1988)\\Die Hard 1988 Bluray-2160p.mkv",
+          "file_size": 37089660329,
+          "category": "holiday_movies",
+          "storage_format": "collection",
+          "title": "Die Hard 1988 Bluray-2160p"
+        },
+        {
+          "id": "1a9bbe3ee601eca2c64d434ae84dd8f9",
+          "filename": "Die Hard 2 1990 WEBDL-2160p.mkv",
+          "file_path": "T:/Holiday Movies\\Die Hard 2 (1990)\\Die Hard 2 1990 WEBDL-2160p.mkv",
+          "file_size": 16320929438,
+          "category": "holiday_movies",
+          "storage_format": "collection",
+          "title": "Die Hard 2 1990 WEBDL-2160p"
+        }
+      ]
+    }
+  }
+}

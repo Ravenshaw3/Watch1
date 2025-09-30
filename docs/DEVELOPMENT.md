@@ -108,15 +108,15 @@ Watch1/
 ### Daily Development
 ```bash
 # Start your day
-make dev-start
-
-# Check system health
-make dev-health
+# Re-scan media & refresh categories after adding files
+make media-scan   # run from project root (requires Make installed)
+# Alternatively, run `python tools/scan_media.py` from the project root
 
 # View logs
 make dev-logs
 
 # Run tests
+{{ ... }}
 make test
 
 # End your day
@@ -139,6 +139,25 @@ make dev-stop
 1. Update models in `backend/models/`
 2. Run migrations: `make db-migrate`
 3. Restart backend if needed
+
+### Media Library Updates
+1. Drop new media files into your configured directories (`DEV_MEDIA_PATHS`)
+2. Run `make media-scan` to trigger a backend scan and rebuild category counts
+3. Optionally override defaults when scanning:
+
+```bash
+# Use a custom directory and force category recalculation for a one-off scan
+WATCH1_MEDIA_DIRECTORY=/app/custom-media \
+WATCH1_RECALCULATE_CATEGORIES=true \
+make media-scan
+```
+
+`make media-scan` is a thin wrapper around `tools/scan_media.py`, which logs in with the standard development credentials (`test@example.com` / `testpass123`) and calls the `/api/v1/media/scan` endpoint. The following environment variables are supported:
+
+- `WATCH1_API_URL` (default `http://localhost:8000`)
+- `WATCH1_MEDIA_DIRECTORY` (default `/app/media`)
+- `WATCH1_RECALCULATE_CATEGORIES` (`true`, `false`, `1`, `0`)
+- If `make` isn’t available, run `python tools/scan_media.py` (Windows) or `python3 tools/scan_media.py` (macOS/Linux) from the project root to perform the same action.
 
 ### Testing
 ```bash

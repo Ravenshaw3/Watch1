@@ -1,0 +1,38 @@
+<?xml version="1.0"?>
+<Container version="2">
+  <Name>Watch1-MediaServer</Name>
+  <Repository>watch1/media-server:latest</Repository>
+  <Registry>https://hub.docker.com/r/watch1/media-server</Registry>
+  <Network>bridge</Network>
+  <MyIP/>
+  <Shell>bash</Shell>
+  <Privileged>false</Privileged>
+  <Support>https://github.com/yourusername/Watch1/issues</Support>
+  <Project>https://github.com/yourusername/Watch1</Project>
+  <Overview>Watch1 Media Server - A modern, web-based media streaming platform with structured backend architecture. Features include media library management, playlist creation, analytics dashboard, and responsive web interface optimized for Unraid servers.</Overview>
+  <Category>MediaApp:Video MediaApp:Music MediaServer:Video MediaServer:Music</Category>
+  <WebUI>http://[IP]:[PORT:3000]</WebUI>
+  <TemplateURL>https://raw.githubusercontent.com/yourusername/Watch1/main/unraid/watch1-template.xml</TemplateURL>
+  <Icon>https://raw.githubusercontent.com/yourusername/Watch1/main/assets/watch1-icon.png</Icon>
+  <ExtraParams>--restart=unless-stopped</ExtraParams>
+  <PostArgs/>
+  <CPUset/>
+  <DateInstalled/>
+  <DonateText>If you appreciate this application, please consider donating to support development.</DonateText>
+  <DonateLink>https://github.com/sponsors/yourusername</DonateLink>
+  <Requires/>
+  <Config Name="WebUI Port" Target="3000" Default="3000" Mode="tcp" Description="Port for the web interface" Type="Port" Display="always" Required="true" Mask="false">3000</Config>
+  <Config Name="API Port" Target="8000" Default="8000" Mode="tcp" Description="Port for the backend API" Type="Port" Display="always" Required="true" Mask="false">8000</Config>
+  <Config Name="Media Path" Target="/app/media" Default="/mnt/user/media" Mode="ro" Description="Path to your media files (read-only recommended)" Type="Path" Display="always" Required="true" Mask="false">/mnt/user/media</Config>
+  <Config Name="App Data" Target="/app/data" Default="/mnt/user/appdata/watch1/data" Mode="rw" Description="Application data directory" Type="Path" Display="always" Required="true" Mask="false">/mnt/user/appdata/watch1/data</Config>
+  <Config Name="Thumbnails" Target="/app/thumbnails" Default="/mnt/user/appdata/watch1/thumbnails" Mode="rw" Description="Thumbnail cache directory" Type="Path" Display="always" Required="true" Mask="false">/mnt/user/appdata/watch1/thumbnails</Config>
+  <Config Name="JWT Secret Key" Target="JWT_SECRET_KEY" Default="change-this-to-a-secure-random-string-minimum-32-characters" Mode="" Description="JWT secret key for authentication (change this!)" Type="Variable" Display="always" Required="true" Mask="true">change-this-to-a-secure-random-string-minimum-32-characters</Config>
+  <Config Name="Flask Environment" Target="FLASK_ENV" Default="production" Mode="" Description="Flask environment (production recommended)" Type="Variable" Display="advanced" Required="false" Mask="false">production</Config>
+  <Config Name="Flask Debug" Target="FLASK_DEBUG" Default="false" Mode="" Description="Flask debug mode (false for production)" Type="Variable" Display="advanced" Required="false" Mask="false">false</Config>
+  <Config Name="Database URL" Target="DATABASE_URL" Default="sqlite:///app/data/watch1.db" Mode="" Description="Database connection URL" Type="Variable" Display="advanced" Required="false" Mask="false">sqlite:///app/data/watch1.db</Config>
+  <Config Name="CORS Origins" Target="CORS_ORIGINS" Default="http://localhost:3000" Mode="" Description="Allowed CORS origins (update with your domain)" Type="Variable" Display="advanced" Required="false" Mask="false">http://localhost:3000</Config>
+  <Config Name="Media Root" Target="MEDIA_ROOT" Default="/app/media" Mode="" Description="Internal media root path" Type="Variable" Display="advanced" Required="false" Mask="false">/app/media</Config>
+  <Config Name="Thumbnails Root" Target="THUMBNAILS_ROOT" Default="/app/thumbnails" Mode="" Description="Internal thumbnails root path" Type="Variable" Display="advanced" Required="false" Mask="false">/app/thumbnails</Config>
+  <Config Name="Data Root" Target="DATA_ROOT" Default="/app/data" Mode="" Description="Internal data root path" Type="Variable" Display="advanced" Required="false" Mask="false">/app/data</Config>
+  <Config Name="Python Unbuffered" Target="PYTHONUNBUFFERED" Default="1" Mode="" Description="Python unbuffered output" Type="Variable" Display="advanced" Required="false" Mask="false">1</Config>
+</Container>

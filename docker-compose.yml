@@ -17,6 +17,11 @@ services:
       - MEDIA_ROOT=/app/media
       - THUMBNAILS_ROOT=/app/thumbnails
       - DATA_ROOT=/app/data
+      - FLASK_ENV=production
+      - FLASK_DEBUG=false
+      - DATABASE_URL=sqlite:///app/data/watch1.db
+      - JWT_SECRET_KEY=production-jwt-secret-key-change-this-in-production-minimum-32-characters
+      - CORS_ORIGINS=http://localhost:3000,http://127.0.0.1:3000
     networks:
       - watch1-network
     healthcheck:

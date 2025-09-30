@@ -15,7 +15,9 @@ export default defineConfig({
     port: 3000,
     proxy: {
       '/api': {
-        target: 'http://localhost:8000',
+        target: process.env.NODE_ENV === 'production' 
+          ? 'http://localhost:8000' 
+          : 'http://backend:8000',
         changeOrigin: true,
         secure: false,
       },
@@ -26,7 +28,7 @@ export default defineConfig({
     sourcemap: true,
   },
   define: {
-    __APP_VERSION__: JSON.stringify('3.0.1'),
+    __APP_VERSION__: JSON.stringify('3.0.4'),
     __BUILD_DATE__: JSON.stringify(new Date().toISOString().split('T')[0]),
   },
 })

@@ -1,14 +1,29 @@
-version: 1
+version: 2
 
 defaults:
-  # Applies when a category omits an attribute
-  media_type: video           # video | audio | image
-  storage_format: collection  # collection | series | group | item
+  media_type: video
+  storage_format: collection
   include_patterns:
-    - "**/*"
+    - "**/*.mp4"
+    - "**/*.mkv"
+    - "**/*.mov"
+    - "**/*.avi"
+    - "**/*.flac"
+    - "**/*.mp3"
+    - "**/*.aac"
+    - "**/*.m4a"
+    - "**/*.wav"
+    - "**/*.ogg"
+    - "**/*.jpg"
+    - "**/*.jpeg"
+    - "**/*.png"
+    - "**/*.webp"
   exclude_patterns:
     - "**/.DS_Store"
     - "**/Thumbs.db"
+    - "**/*.nfo"
+    - "**/*.srt"
+    - "**/*.sub"
 
 categories:
   - key: movies
@@ -17,45 +32,131 @@ categories:
     media_type: video
     storage_format: collection
     root_path: /app/media/Movies
+    playback:
+      profile: cinema
+      allow_hls: true
     ui:
-      icon: mdi-movie-open
-      color: "#ff9800"
+      sort: title
+      layout: poster-grid
 
   - key: tv_series
     label: TV Series
     media_type: video
     storage_format: series
-    root_path: /app/media/TV-Series
+    root_path: /app/media/TV Shows
     hierarchy:
       levels:
-        - name: show
+        - name: series
+          key: series
         - name: season
+          key: season
         - name: episode
+          key: episode
     playback:
-      default_mode: continuous
+      profile: episodic
+      allow_hls: true
     ui:
-      icon: mdi-television
-      color: "#3f51b5"
+      sort: air_date
+      layout: series-grid
 
-  - key: music
-    label: Music
+  - key: documentaries
+    label: Documentaries
+    media_type: video
+    storage_format: collection
+    root_path: /app/media/Documentaries
+    include_patterns:
+      - "**/*.mp4"
+      - "**/*.mkv"
+    ui:
+      sort: release_date
+
+  - key: kids
+    label: Kids & Family
+    media_type: video
+    storage_format: collection
+    root_path: /app/media/Kids
+    playback:
+      profile: safe
+      enable_resume: true
+    ui:
+      sort: title
+      layout: poster-grid
+
+  - key: concerts
+    label: Concerts & Live Shows
+    media_type: video
+    storage_format: collection
+    root_path: /app/media/Music Videos
+    include_patterns:
+      - "**/*.mp4"
+      - "**/*.mkv"
+      - "**/*.flac"
+    playback:
+      profile: music-video
+
+  - key: music_albums
+    label: Music Albums
     media_type: audio
     storage_format: group
     root_path: /app/media/Music
     hierarchy:
       levels:
         - name: artist
+          key: artist
         - name: album
-        - name: track
+          key: album
     include_patterns:
-      - "**/*.mp3"
       - "**/*.flac"
+      - "**/*.mp3"
+      - "**/*.aac"
       - "**/*.m4a"
     playback:
-      default_mode: continuous
+      profile: audio-hires
+      gapless: true
     ui:
-      icon: mdi-music
-      color: "#4caf50"
+      sort: artist
+      layout: album-grid
+
+  - key: audiobooks
+    label: Audiobooks
+    media_type: audio
+    storage_format: series
+    root_path: /app/media/Audiobooks
+    hierarchy:
+      levels:
+        - name: series
+          key: series
+        - name: book
+          key: book
+        - name: part
+          key: part
+    include_patterns:
+      - "**/*.m4b"
+      - "**/*.mp3"
+      - "**/*.aac"
+    playback:
+      profile: spoken-word
+      remember_position: true
+
+  - key: podcasts
+    label: Podcasts
+    media_type: audio
+    storage_format: series
+    root_path: /app/media/Podcasts
+    hierarchy:
+      levels:
+        - name: show
+          key: show
+        - name: season
+          key: season
+        - name: episode
+          key: episode
+    include_patterns:
+      - "**/*.mp3"
+      - "**/*.m4a"
+    playback:
+      profile: spoken-word
+      remember_position: true
 
   - key: photos
     label: Photos
@@ -68,9 +169,24 @@ categories:
       - "**/*.png"
       - "**/*.webp"
     ui:
-      icon: mdi-image-multiple
-      color: "#9c27b0"
+      layout: gallery
+      sort: captured_date
+
+  - key: wallpapers
+    label: Wallpapers & Artwork
+    media_type: image
+    storage_format: group
+    root_path: /app/media/Wallpapers
+    include_patterns:
+      - "**/*.jpg"
+      - "**/*.jpeg"
+      - "**/*.png"
+      - "**/*.webp"
+    playback:
+      profile: still-image
+    ui:
+      layout: mosaic
 
 validation:
-  # Toggle to enforce schema validation at startup
   strict: true
+  allow_missing: false

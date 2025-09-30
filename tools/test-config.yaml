@@ -1,0 +1,211 @@
+# Watch1 Test Configuration
+# Defines test rules, mappings, and feature tracking
+
+test_environment:
+  backend_url: "http://localhost:8000"
+  frontend_url: "http://localhost:3000"
+  timeout_seconds: 30
+  retry_attempts: 3
+
+# Test user credentials
+test_credentials:
+  username: "test@example.com"
+  password: "testpass123"
+  expected_role: "superuser"
+
+# Feature mapping and dependencies
+feature_mappings:
+  authentication:
+    frontend_routes:
+      - "/login"
+      - "/register"
+    backend_endpoints:
+      - "POST /api/v1/auth/login/access-token"
+      - "GET /api/v1/users/me"
+    dependencies: []
+    
+  media_management:
+    frontend_routes:
+      - "/"
+      - "/library"
+      - "/tv-series"
+    backend_endpoints:
+      - "GET /api/v1/media/"
+      - "GET /api/v1/media/categories"
+      - "GET /api/v1/media/scan-info"
+      - "POST /api/v1/media/scan"
+    dependencies: ["authentication"]
+    
+  admin_maintenance:
+    frontend_routes:
+      - "/admin/maintenance"
+    backend_endpoints:
+      - "GET /api/v1/admin/database/info"
+      - "GET /api/v1/admin/worker/health"
+      - "GET /api/v1/admin/database/jobs"
+      - "POST /api/v1/admin/database/clean"
+      - "POST /api/v1/admin/database/backup"
+    dependencies: ["authentication"]
+    requires_admin: true
+    
+  playlists:
+    frontend_routes:
+      - "/playlists"
+    backend_endpoints:
+      - "GET /api/v1/playlists/"
+      - "POST /api/v1/playlists/"
+      - "PUT /api/v1/playlists/{id}"
+      - "DELETE /api/v1/playlists/{id}"
+    dependencies: ["authentication", "media_management"]
+    
+  settings:
+    frontend_routes:
+      - "/settings"
+    backend_endpoints:
+      - "GET /api/v1/settings/"
+      - "PUT /api/v1/settings/"
+      - "GET /api/v1/settings/media-directories"
+    dependencies: ["authentication"]
+    
+  analytics:
+    frontend_routes:
+      - "/analytics"
+    backend_endpoints:
+      - "GET /api/v1/analytics/dashboard"
+      - "GET /api/v1/analytics/activity"
+    dependencies: ["authentication", "media_management"]
+
+# Test rules and validation criteria
+test_rules:
+  response_time:
+    max_acceptable_ms: 5000
+    warning_threshold_ms: 2000
+    
+  success_criteria:
+    minimum_pass_rate: 90
+    critical_features: ["authentication", "media_management"]
+    
+  data_validation:
+    media_scan:
+      required_fields: ["total_files_found", "files_added", "directories_scanned"]
+      min_directories: 1
+    
+    user_profile:
+      required_fields: ["email", "is_superuser", "created_at"]
+      
+    database_info:
+      required_fields: ["database_type", "tables", "total_size"]
+
+# Link validation rules
+link_validation:
+  frontend_backend_mapping:
+    # Frontend routes should map to backend endpoints
+    "/admin/maintenance": 
+      - "GET /api/v1/admin/database/info"
+      - "GET /api/v1/admin/worker/health"
+    "/library":
+      - "GET /api/v1/media/"
+      - "GET /api/v1/media/categories"
+    "/settings":
+      - "GET /api/v1/settings/"
+      
+  navigation_consistency:
+    # All frontend routes should be accessible via navigation
+    required_nav_links:
+      - "Library"
+      - "TV Series" 
+      - "Playlists"
+      - "Analytics"
+      - "Settings"
+      - "Admin" # Only for superusers
+      
+  api_consistency:
+    # API endpoints should follow consistent patterns
+    naming_conventions:
+      - "All endpoints use kebab-case"
+      - "Collection endpoints end with /"
+      - "Admin endpoints start with /admin/"
+    
+    response_formats:
+      - "All responses are JSON"
+      - "Error responses include 'detail' field"
+      - "List responses include pagination info"
+
+# Performance benchmarks
+performance_benchmarks:
+  endpoint_response_times:
+    "/api/v1/health": 100  # ms
+    "/api/v1/auth/login/access-token": 1000
+    "/api/v1/media/": 2000
+    "/api/v1/media/scan": 30000  # Scan can take longer
+    "/api/v1/admin/database/info": 500
+    
+  frontend_load_times:
+    "/": 2000  # ms
+    "/login": 1500
+    "/admin/maintenance": 3000
+
+# Test data and fixtures
+test_data:
+  sample_media_files:
+    - filename: "test_movie.mp4"
+      category: "movies"
+      expected_metadata: ["title", "year", "file_size"]
+      
+  sample_playlists:
+    - name: "Test Playlist"
+      description: "Automated test playlist"
+      
+  database_states:
+    clean_state:
+      expected_tables: ["users", "media_files", "playlists", "playlist_items"]
+      min_user_count: 1
+
+# Monitoring and alerting
+monitoring:
+  health_check_interval: 300  # seconds
+  alert_thresholds:
+    response_time_ms: 10000
+    error_rate_percent: 5
+    
+  notification_channels:
+    - type: "console"
+    - type: "file"
+      path: "test-alerts.log"
+
+# Feature development tracking
+development_tracking:
+  current_version: "3.0.4"
+  
+  completed_features:
+    - "User authentication"
+    - "Media library management"
+    - "Admin maintenance interface"
+    - "Media scanning"
+    - "Database management"
+    
+  in_development:
+    - "Advanced playlist features"
+    - "Media streaming optimization"
+    - "User preferences"
+    
+  planned_features:
+    - "Multi-user support"
+    - "Advanced analytics"
+    - "Mobile app support"
+    - "Cloud storage integration"
+    
+  deprecated_features: []
+
+# Test execution settings
+execution_settings:
+  parallel_execution: false
+  cleanup_after_tests: true
+  generate_screenshots: false
+  save_request_logs: true
+  
+  test_categories:
+    smoke_tests: ["authentication", "service_availability"]
+    regression_tests: ["media_management", "admin_maintenance"]
+    performance_tests: ["response_times", "load_testing"]
+    integration_tests: ["frontend_backend_mapping"]

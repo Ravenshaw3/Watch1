@@ -1,0 +1,160 @@
+{
+  "timestamp": "2025-09-30T10:35:16.321358",
+  "environment": "unraid",
+  "backend_url": "http://192.168.254.14:8000",
+  "frontend_url": "http://192.168.254.14:3000",
+  "summary": {
+    "total_tests": 13,
+    "passed": 13,
+    "failed": 0,
+    "skipped": 0,
+    "success_rate": 100.0
+  },
+  "categories": {
+    "Service": {
+      "pass": 2,
+      "fail": 0,
+      "skip": 0
+    },
+    "Auth": {
+      "pass": 2,
+      "fail": 0,
+      "skip": 0
+    },
+    "Media": {
+      "pass": 3,
+      "fail": 0,
+      "skip": 0
+    },
+    "Unraid": {
+      "pass": 2,
+      "fail": 0,
+      "skip": 0
+    },
+    "CORS": {
+      "pass": 1,
+      "fail": 0,
+      "skip": 0
+    },
+    "Database": {
+      "pass": 1,
+      "fail": 0,
+      "skip": 0
+    },
+    "Production": {
+      "pass": 2,
+      "fail": 0,
+      "skip": 0
+    }
+  },
+  "performance": {
+    "avg_response_ms": 53.123333333333335,
+    "max_response_ms": 185.74
+  },
+  "detailed_results": [
+    {
+      "timestamp": "2025-09-30T10:35:15.463474",
+      "category": "Service",
+      "test_name": "Backend Health",
+      "status": "PASS",
+      "details": "Status: healthy",
+      "response_time_ms": 42.18
+    },
+    {
+      "timestamp": "2025-09-30T10:35:15.649341",
+      "category": "Service",
+      "test_name": "System Info",
+      "status": "PASS",
+      "details": "Version: 3.0.3, Environment: unraid, Media: 50",
+      "response_time_ms": 185.74
+    },
+    {
+      "timestamp": "2025-09-30T10:35:15.673867",
+      "category": "Auth",
+      "test_name": "Login",
+      "status": "PASS",
+      "details": "Token received (length: 16)",
+      "response_time_ms": 24.37
+    },
+    {
+      "timestamp": "2025-09-30T10:35:15.698068",
+      "category": "Auth",
+      "test_name": "User Profile",
+      "status": "PASS",
+      "details": "User: test@example.com, Admin: True",
+      "response_time_ms": 24.12
+    },
+    {
+      "timestamp": "2025-09-30T10:35:15.713715",
+      "category": "Media",
+      "test_name": "Media List",
+      "status": "PASS",
+      "details": "Found 50 total, 50 returned",
+      "response_time_ms": 15.44
+    },
+    {
+      "timestamp": "2025-09-30T10:35:15.713761",
+      "category": "Media",
+      "test_name": "Media File Data",
+      "status": "PASS",
+      "details": "Sample: Seth & Morgan.MOV (videos)",
+      "response_time_ms": 0
+    },
+    {
+      "timestamp": "2025-09-30T10:35:15.740695",
+      "category": "Media",
+      "test_name": "Categories",
+      "status": "PASS",
+      "details": "1 categories: videos(50)",
+      "response_time_ms": 26.89
+    },
+    {
+      "timestamp": "2025-09-30T10:35:15.907162",
+      "category": "Unraid",
+      "test_name": "Direct Media Access",
+      "status": "PASS",
+      "details": "Environment: unraid, Media files: 50",
+      "response_time_ms": 0
+    },
+    {
+      "timestamp": "2025-09-30T10:35:15.930874",
+      "category": "Unraid",
+      "test_name": "Native Performance",
+      "status": "PASS",
+      "details": "Response time: 0.024s",
+      "response_time_ms": 0
+    },
+    {
+      "timestamp": "2025-09-30T10:35:15.944511",
+      "category": "CORS",
+      "test_name": "Configuration",
+      "status": "PASS",
+      "details": "Allow-Origin: http://192.168.254.14:3000",
+      "response_time_ms": 0
+    },
+    {
+      "timestamp": "2025-09-30T10:35:16.107572",
+      "category": "Database",
+      "test_name": "PostgreSQL Compliance",
+      "status": "PASS",
+      "details": "Environment: unraid, Version: 3.0.3",
+      "response_time_ms": 0
+    },
+    {
+      "timestamp": "2025-09-30T10:35:16.296607",
+      "category": "Production",
+      "test_name": "Version Consistency",
+      "status": "PASS",
+      "details": "System version: 3.0.3",
+      "response_time_ms": 0
+    },
+    {
+      "timestamp": "2025-09-30T10:35:16.321064",
+      "category": "Production",
+      "test_name": "Health Monitoring",
+      "status": "PASS",
+      "details": "Health endpoint operational",
+      "response_time_ms": 0
+    }
+  ]
+}

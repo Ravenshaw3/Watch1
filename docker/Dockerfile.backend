@@ -19,7 +19,6 @@ RUN pip install --no-cache-dir -r requirements.txt
 
 # Copy backend code
 COPY backend/ .
-COPY backend/flask_simple.py .
 
 # Create necessary directories
 RUN mkdir -p /app/media /app/logs /app/uploads /app/thumbnails
@@ -35,4 +34,4 @@ HEALTHCHECK --interval=30s --timeout=10s --start-period=5s --retries=3 \
 EXPOSE 8000
 
 # Development command (with auto-reload)
-CMD ["python", "flask_simple.py"]
+CMD ["python", "main.py"]

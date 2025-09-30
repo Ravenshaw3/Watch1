@@ -6,9 +6,9 @@ WORKDIR /app
 # Copy package files
 COPY package*.json ./
 
-    # Install dependencies
-    RUN npm ci --only=production
-    RUN npm install @rollup/rollup-linux-x64-musl --save-optional
+# Install dependencies
+RUN npm ci --only=production
+RUN npm install @rollup/rollup-linux-x64-musl --save-optional
 
 # Copy source code
 COPY . .

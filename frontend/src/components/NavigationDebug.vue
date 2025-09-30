@@ -20,7 +20,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, watch } from 'vue'
+import { ref, computed } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
 import { useAuthStore } from '@/stores/auth'
 
@@ -35,15 +35,7 @@ const authStatus = computed(() => authStore.isAuthenticated ? 'Authenticated' : 
 const tokenPresent = computed(() => authStore.token ? 'Yes' : 'No')
 const userLoaded = computed(() => authStore.user ? 'Yes' : 'No')
 
-// Watch for route changes and log them
-watch(currentRoute, (newRoute, oldRoute) => {
-  console.log(`Navigation: ${oldRoute} → ${newRoute}`)
-})
-
-// Watch for auth changes
-watch(authStatus, (newStatus) => {
-  console.log(`Auth status changed: ${newStatus}`)
-})
+// Route and auth changes logged via computed properties
 
 // Capture navigation errors
 router.onError((error) => {

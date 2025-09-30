@@ -41,8 +41,8 @@ export const mediaApi = {
     }
   },
 
-  async getMediaCategories(): Promise<{ categories: MediaCategory[] }> {
-    const response = await apiClient.get<{ categories: MediaCategory[] }>('/media/categories')
+  async getMediaCategories(): Promise<{ categories: MediaCategoryInfo[] }> {
+    const response = await apiClient.get<{ categories: MediaCategoryInfo[] }>('/media/categories')
     return response.data
   },
 

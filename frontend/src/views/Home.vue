@@ -178,7 +178,6 @@
 
 <script setup lang="ts">
 import { onMounted, computed } from 'vue'
-import { useRouter } from 'vue-router'
 import { useAuthStore } from '@/stores/auth'
 import { useMediaStore } from '@/stores/media'
 import MediaCard from '@/components/MediaCardNew.vue'
@@ -191,7 +190,6 @@ import {
   ShieldCheckIcon
 } from '@heroicons/vue/24/outline'
 
-const router = useRouter()
 const authStore = useAuthStore()
 const mediaStore = useMediaStore()
 

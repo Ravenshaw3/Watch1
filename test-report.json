@@ -1,0 +1,183 @@
+{
+  "timestamp": "2025-09-29T19:54:25.655842",
+  "summary": {
+    "total_tests": 15,
+    "passed": 14,
+    "failed": 1,
+    "skipped": 0,
+    "success_rate": 93.33333333333333
+  },
+  "categories": {
+    "Service": {
+      "pass": 1,
+      "fail": 1,
+      "skip": 0
+    },
+    "Auth": {
+      "pass": 2,
+      "fail": 0,
+      "skip": 0
+    },
+    "Media": {
+      "pass": 3,
+      "fail": 0,
+      "skip": 0
+    },
+    "Admin": {
+      "pass": 3,
+      "fail": 0,
+      "skip": 0
+    },
+    "Scan": {
+      "pass": 1,
+      "fail": 0,
+      "skip": 0
+    },
+    "Playlist": {
+      "pass": 1,
+      "fail": 0,
+      "skip": 0
+    },
+    "Settings": {
+      "pass": 1,
+      "fail": 0,
+      "skip": 0
+    },
+    "Analytics": {
+      "pass": 1,
+      "fail": 0,
+      "skip": 0
+    },
+    "System": {
+      "pass": 1,
+      "fail": 0,
+      "skip": 0
+    }
+  },
+  "performance": {
+    "avg_response_ms": 26.61785714285714,
+    "max_response_ms": 37.05
+  },
+  "detailed_results": [
+    {
+      "timestamp": "2025-09-29T19:54:25.142621",
+      "category": "Service",
+      "test_name": "Backend Health",
+      "status": "PASS",
+      "details": "Version: 3.0.4",
+      "response_time_ms": 28.45
+    },
+    {
+      "timestamp": "2025-09-29T19:54:25.150625",
+      "category": "Service",
+      "test_name": "Frontend Availability",
+      "status": "FAIL",
+      "details": "('Connection aborted.', RemoteDisconnected('Remote end closed connection without response'))",
+      "response_time_ms": 0
+    },
+    {
+      "timestamp": "2025-09-29T19:54:25.173955",
+      "category": "Auth",
+      "test_name": "Login",
+      "status": "PASS",
+      "details": "Token received: eyJhbGciOiJIUzI1NiIs...",
+      "response_time_ms": 20.2
+    },
+    {
+      "timestamp": "2025-09-29T19:54:25.211534",
+      "category": "Auth",
+      "test_name": "User Profile",
+      "status": "PASS",
+      "details": "User: test@example.com, Admin: True",
+      "response_time_ms": 36.34
+    },
+    {
+      "timestamp": "2025-09-29T19:54:25.234015",
+      "category": "Media",
+      "test_name": "Media List",
+      "status": "PASS",
+      "details": "Found 14 media items",
+      "response_time_ms": 20.68
+    },
+    {
+      "timestamp": "2025-09-29T19:54:25.268059",
+      "category": "Media",
+      "test_name": "Categories",
+      "status": "PASS",
+      "details": "Categories: ['kids', 'movies', 'music', 'tv_shows', 'videos']",
+      "response_time_ms": 19.69
+    },
+    {
+      "timestamp": "2025-09-29T19:54:25.295285",
+      "category": "Media",
+      "test_name": "Scan Info",
+      "status": "PASS",
+      "details": "Total files: 14",
+      "response_time_ms": 24.71
+    },
+    {
+      "timestamp": "2025-09-29T19:54:25.342599",
+      "category": "Admin",
+      "test_name": "Database Info",
+      "status": "PASS",
+      "details": "DB Type: PostgreSQL",
+      "response_time_ms": 31.83
+    },
+    {
+      "timestamp": "2025-09-29T19:54:25.377363",
+      "category": "Admin",
+      "test_name": "Worker Health",
+      "status": "PASS",
+      "details": "Max workers: 4",
+      "response_time_ms": 28.31
+    },
+    {
+      "timestamp": "2025-09-29T19:54:25.417722",
+      "category": "Admin",
+      "test_name": "Job History",
+      "status": "PASS",
+      "details": "Jobs found: 0",
+      "response_time_ms": 35.54
+    },
+    {
+      "timestamp": "2025-09-29T19:54:25.450796",
+      "category": "Scan",
+      "test_name": "Media Scan",
+      "status": "PASS",
+      "details": "Found: 0, Added: 0, Dirs: 1",
+      "response_time_ms": 17.61
+    },
+    {
+      "timestamp": "2025-09-29T19:54:25.502911",
+      "category": "Playlist",
+      "test_name": "List Playlists",
+      "status": "PASS",
+      "details": "Found 0 playlists",
+      "response_time_ms": 37.05
+    },
+    {
+      "timestamp": "2025-09-29T19:54:25.532364",
+      "category": "Settings",
+      "test_name": "Get Settings",
+      "status": "PASS",
+      "details": "Settings: ['media_locations', 'playback', 'scanning', 'security', 'ui']",
+      "response_time_ms": 25.98
+    },
+    {
+      "timestamp": "2025-09-29T19:54:25.568363",
+      "category": "Analytics",
+      "test_name": "Dashboard",
+      "status": "PASS",
+      "details": "Metrics: ['activity', 'categories', 'overview', 'storage']",
+      "response_time_ms": 33.62
+    },
+    {
+      "timestamp": "2025-09-29T19:54:25.592618",
+      "category": "System",
+      "test_name": "Version Info",
+      "status": "PASS",
+      "details": "API Version: v1",
+      "response_time_ms": 12.64
+    }
+  ]
+}

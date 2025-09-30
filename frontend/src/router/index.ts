@@ -1,5 +1,6 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import { useAuthStore } from '@/stores/auth'
+import AdminMaintenance from '@/views/AdminMaintenance.vue'
 
 const router = createRouter({
   history: createWebHistory(),
@@ -47,6 +48,12 @@ const router = createRouter({
               meta: { requiresAuth: true }
             },
             {
+              path: '/admin/maintenance',
+              name: 'AdminMaintenance',
+              component: AdminMaintenance,
+              meta: { requiresAuth: true, requiresAdmin: true }
+            },
+            {
               path: '/test',
               name: 'StreamingTest',
               component: () => import('@/views/StreamingTest.vue'),
@@ -82,6 +89,9 @@ router.beforeEach(async (to, _from, next) => {
   if (to.meta.requiresAuth && !authStore.isAuthenticated) {
     console.log('Navigation blocked: Authentication required for', to.path)
     next('/login')
+  } else if (to.meta.requiresAdmin && !authStore.isAdmin) {
+    console.log('Navigation blocked: Admin access required for', to.path)
+    next('/')
   } else if ((to.name === 'Login' || to.name === 'Register') && authStore.isAuthenticated) {
     console.log('Navigation redirect: Already authenticated, redirecting to home')
     next('/')

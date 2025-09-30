@@ -57,7 +57,7 @@
                       d="M12 10v6m0 0l-3-3m3 3l3-3M3 17V7a2 2 0 012-2h6l2 2h6a2 2 0 012 2v10a2 2 0 01-2 2H5a2 2 0 01-2-2z"/>
               </svg>
             </button>
-            <button @click="previewSubtitle(subtitle)" class="action-btn" title="Preview">
+            <button @click="showSubtitlePreview(subtitle)" class="action-btn" title="Preview">
               <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
                       d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
@@ -80,7 +80,7 @@
     <div v-if="showPreview" class="preview-modal" @click="closePreview">
       <div class="preview-content" @click.stop>
         <div class="preview-header">
-          <h3>{{ previewSubtitle?.filename }}</h3>
+          <h3>{{ previewSubtitleRef?.filename }}</h3>
           <button @click="closePreview" class="close-btn">
             <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
@@ -111,7 +111,7 @@ const subtitles = ref<SubtitleInfo[]>([])
 const loading = ref(false)
 const showUploader = ref(false)
 const showPreview = ref(false)
-const previewSubtitle = ref<SubtitleInfo | null>(null)
+const previewSubtitleRef = ref<SubtitleInfo | null>(null)
 const previewContent = ref('')
 
 // Methods
@@ -144,14 +144,14 @@ const downloadSubtitle = (subtitle: SubtitleInfo) => {
   document.body.removeChild(link)
 }
 
-const previewSubtitle = async (subtitle: SubtitleInfo) => {
+const showSubtitlePreview = async (subtitle: SubtitleInfo) => {
   try {
     const response = await fetch(`http://localhost:8000${subtitle.url}?token=${localStorage.getItem('access_token')}`)
     const content = await response.text()
     
     // Limit preview to first 2000 characters
     previewContent.value = content.length > 2000 ? content.substring(0, 2000) + '...' : content
-    previewSubtitle.value = subtitle
+    previewSubtitleRef.value = subtitle
     showPreview.value = true
   } catch (error) {
     alert('Failed to load subtitle preview')
@@ -160,7 +160,7 @@ const previewSubtitle = async (subtitle: SubtitleInfo) => {
 
 const closePreview = () => {
   showPreview.value = false
-  previewSubtitle.value = null
+  previewSubtitleRef.value = null
   previewContent.value = ''
 }
 

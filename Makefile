@@ -1,7 +1,7 @@
 # Watch1 v3.0.1 - Cross-Platform Development Commands
 # Provides consistent commands across Windows, macOS, and Linux
 
-.PHONY: help dev-start dev-stop dev-reset dev-health dev-logs dev-clean test build deploy
+.PHONY: help dev-start dev-stop dev-reset dev-health dev-logs dev-clean media-scan test build deploy
 
 # Default target
 help:
@@ -61,13 +61,22 @@ else
 	@python3 tools/health-monitor.py
 endif
 
+media-scan:
+ifeq ($(OS),Windows_NT)
+	@echo "Triggering media scan & category refresh..."
+	@python tools\\scan_media.py
+	@echo "Media scan request submitted."
+else
+	@echo "Triggering media scan & category refresh..."
+	@python3 tools/scan_media.py
+	@echo "Media scan request submitted."
+endif
+
 dev-logs:
 	@docker-compose -f docker-compose.dev.yml logs -f
 
 dev-clean:
-	@docker-compose -f docker-compose.dev.yml down -v --remove-orphans
-	@docker system prune -f
-	@docker volume prune -f
+{{ ... }}
 
 # Testing Commands
 test:

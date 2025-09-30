@@ -19,11 +19,20 @@ services:
     environment:
       - PYTHONUNBUFFERED=1
       - FLASK_ENV=production
+      - DATABASE_URL=postgresql://watch1_user:watch1_password@watch1-db:5432/watch1
+      - DB_HOST=watch1-db
+      - DB_PORT=5432
+      - DB_NAME=watch1
+      - DB_USER=watch1_user
+      - DB_PASSWORD=watch1_password
+      - REDIS_URL=redis://watch1-redis:6379/0
       - MEDIA_ROOT=/app/media
       - THUMBNAILS_ROOT=/app/thumbnails
       - DATA_ROOT=/app/data
       - JWT_SECRET_KEY=prod-jwt-secret-key-change-this
       - CORS_ORIGINS=http://localhost:3000,http://127.0.0.1:3000,http://192.168.254.14:3000,http://watch1-frontend:3000
+      - ENV_TYPE=unraid
+      - ENVIRONMENT=production
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:8000/api/v1/health"]
       interval: 30s
@@ -46,6 +55,15 @@ services:
       - NODE_ENV=production
     depends_on:
       - watch1-backend
+    networks:
+      - watch1-network
+
+  watch1-redis:
+    image: redis:7-alpine
+    container_name: watch1-redis
+    restart: unless-stopped
+    volumes:
+      - /mnt/user/appdata/watch1/redis_data:/data
     networks:
       - watch1-network
 

@@ -1,0 +1,38 @@
+<?xml version="1.0"?>
+<Container version="2">
+  <Name>Watch1</Name>
+  <Repository>watch1/media-server</Repository>
+  <Registry>https://hub.docker.com/r/watch1/media-server</Registry>
+  <Network>bridge</Network>
+  <MyIP/>
+  <Shell>bash</Shell>
+  <Privileged>false</Privileged>
+  <Support>https://github.com/your-username/Watch1</Support>
+  <Project>https://github.com/your-username/Watch1</Project>
+  <Overview>Watch1 is a modern media server with advanced categorization, streaming, and management features. Built with Vue.js frontend and FastAPI backend, designed specifically for Unraid servers with direct media access.</Overview>
+  <Category>MediaServer:Video MediaServer:Music MediaServer:Photos</Category>
+  <WebUI>http://[IP]:[PORT:3000]</WebUI>
+  <TemplateURL>https://raw.githubusercontent.com/your-username/Watch1/main/unraid/watch1-ca-template.xml</TemplateURL>
+  <Icon>https://raw.githubusercontent.com/your-username/Watch1/main/unraid/watch1-icon.png</Icon>
+  <ExtraParams>--restart=unless-stopped</ExtraParams>
+  <PostArgs/>
+  <CPUset/>
+  <DateInstalled/>
+  <DonateText/>
+  <DonateLink/>
+  <Requires/>
+  <Config Name="Web UI Port" Target="3000" Default="3000" Mode="tcp" Description="Port for Web UI access" Type="Port" Display="always" Required="true" Mask="false">3000</Config>
+  <Config Name="API Port" Target="8000" Default="8000" Mode="tcp" Description="Port for API access" Type="Port" Display="always" Required="true" Mask="false">8000</Config>
+  <Config Name="Media Path" Target="/app/media" Default="/mnt/user/media" Mode="ro" Description="Path to your media files (movies, TV shows, music)" Type="Path" Display="always" Required="true" Mask="false">/mnt/user/media</Config>
+  <Config Name="Config Path" Target="/app/config" Default="/mnt/user/appdata/watch1/config" Mode="rw" Description="Configuration files and database" Type="Path" Display="always" Required="true" Mask="false">/mnt/user/appdata/watch1/config</Config>
+  <Config Name="Thumbnails Path" Target="/app/thumbnails" Default="/mnt/user/appdata/watch1/thumbnails" Mode="rw" Description="Generated thumbnails and cache" Type="Path" Display="always" Required="true" Mask="false">/mnt/user/appdata/watch1/thumbnails</Config>
+  <Config Name="Logs Path" Target="/app/logs" Default="/mnt/user/appdata/watch1/logs" Mode="rw" Description="Application logs" Type="Path" Display="always" Required="false" Mask="false">/mnt/user/appdata/watch1/logs</Config>
+  <Config Name="Database URL" Target="DATABASE_URL" Default="postgresql://watch1_user:watch1_password@watch1-postgres:5432/watch1" Mode="" Description="PostgreSQL database connection string" Type="Variable" Display="always" Required="true" Mask="true">postgresql://watch1_user:watch1_password@watch1-postgres:5432/watch1</Config>
+  <Config Name="JWT Secret" Target="JWT_SECRET_KEY" Default="" Mode="" Description="JWT secret key for authentication (generate a secure random string)" Type="Variable" Display="always" Required="true" Mask="true"></Config>
+  <Config Name="Admin Email" Target="ADMIN_EMAIL" Default="admin@example.com" Mode="" Description="Default admin user email" Type="Variable" Display="always" Required="true" Mask="false">admin@example.com</Config>
+  <Config Name="Admin Password" Target="ADMIN_PASSWORD" Default="" Mode="" Description="Default admin user password" Type="Variable" Display="always" Required="true" Mask="true"></Config>
+  <Config Name="Environment" Target="ENVIRONMENT" Default="production" Mode="" Description="Application environment" Type="Variable" Display="advanced" Required="false" Mask="false">production</Config>
+  <Config Name="Log Level" Target="LOG_LEVEL" Default="INFO" Mode="" Description="Logging level (DEBUG, INFO, WARNING, ERROR)" Type="Variable" Display="advanced" Required="false" Mask="false">INFO</Config>
+  <Config Name="PUID" Target="PUID" Default="99" Mode="" Description="User ID for file permissions" Type="Variable" Display="advanced" Required="false" Mask="false">99</Config>
+  <Config Name="PGID" Target="PGID" Default="100" Mode="" Description="Group ID for file permissions" Type="Variable" Display="advanced" Required="false" Mask="false">100</Config>
+</Container>

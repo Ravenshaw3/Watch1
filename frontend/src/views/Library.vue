@@ -3,10 +3,13 @@
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
       <!-- Header -->
       <div class="mb-8">
-        <div class="flex justify-between items-center mb-4">
-          <h1 class="text-3xl font-bold text-gray-900">
-            Media Library
-          </h1>
+        <div class="flex justify-between items-center mb-6">
+          <div>
+            <h1 class="text-3xl font-bold text-gray-900">
+              Media Library
+            </h1>
+            <p class="text-gray-600 mt-1">Browse and manage your media collection</p>
+          </div>
           <div class="flex gap-2">
             <button
               @click="scanMedia"
@@ -26,20 +29,24 @@
         </div>
         
         <!-- Library Status Box -->
-        <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-4 mb-6">
+        <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6 mb-6">
           <div class="flex items-center justify-between">
-            <div class="flex items-center space-x-6">
+            <div class="grid grid-cols-4 gap-8">
               <div class="text-center">
-                <div class="text-2xl font-bold text-gray-900">{{ total }}</div>
+                <div class="text-3xl font-bold text-gray-900">{{ total }}</div>
                 <div class="text-sm text-gray-600">Total Files</div>
               </div>
               <div class="text-center">
-                <div class="text-2xl font-bold text-primary-600">{{ safeMediaArray.length }}</div>
+                <div class="text-3xl font-bold text-primary-600">{{ safeMediaArray.length }}</div>
                 <div class="text-sm text-gray-600">Showing</div>
               </div>
               <div class="text-center">
-                <div class="text-2xl font-bold text-green-600">{{ safeCategoriesArray.length }}</div>
+                <div class="text-3xl font-bold text-green-600">{{ enabledCategoriesCount }}</div>
                 <div class="text-sm text-gray-600">Categories</div>
+              </div>
+              <div class="text-center">
+                <div class="text-3xl font-bold text-blue-600">{{ selectedCategoryInfo?.displayName || 'All' }}</div>
+                <div class="text-sm text-gray-600">Current View</div>
               </div>
             </div>
             <div class="text-right">
@@ -49,52 +56,70 @@
           </div>
         </div>
         
-        <!-- Category Tabs -->
-        <div class="flex flex-wrap gap-2 mb-6">
-          <button
-            v-for="category in safeCategoriesArray"
-            :key="category?.name || `category-${Math.random()}`"
-            @click="selectCategory(category?.name)"
-            :class="[
-              'px-4 py-2 rounded-lg text-sm font-medium transition-colors',
-              selectedCategory === category?.name
-                ? 'bg-primary-600 text-white'
-                : 'bg-white text-gray-700 hover:bg-gray-100 border border-gray-300'
-            ]"
-          >
-            {{ category?.display_name || 'Unknown' }} ({{ category?.count || 0 }})
-          </button>
-        </div>
+        <!-- Enhanced Category Manager -->
+        <CategoryManager
+          :categories="categoriesData"
+          :selected-category="selectedCategory"
+          @category-selected="handleCategorySelected"
+          @categories-updated="handleCategoriesUpdated"
+        />
         
-        <!-- Filters -->
-        <div class="flex flex-wrap gap-4 mb-6">
-          <input
-            v-model="searchQuery"
-            @input="debouncedSearch"
-            type="text"
-            placeholder="Search media..."
-            class="input w-64"
-          />
-          
-          <select
-            v-model="sortBy"
-            @change="applyFilters"
-            class="input w-auto"
-          >
-            <option value="created_at">Date Added</option>
-            <option value="filename">Name</option>
-            <option value="file_size">Size</option>
-            <option value="duration">Duration</option>
-          </select>
-          
-          <select
-            v-model="sortOrder"
-            @change="applyFilters"
-            class="input w-auto"
-          >
-            <option value="desc">Newest First</option>
-            <option value="asc">Oldest First</option>
-          </select>
+        <!-- Enhanced Filters -->
+        <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-4 mb-6">
+          <div class="flex flex-wrap gap-4 items-center">
+            <div class="flex-1 min-w-64">
+              <input
+                v-model="searchQuery"
+                @input="debouncedSearch"
+                type="text"
+                :placeholder="`Search ${selectedCategoryInfo?.displayName || 'media'}...`"
+                class="input w-full"
+              />
+            </div>
+            
+            <div class="flex gap-2">
+              <select
+                v-model="sortBy"
+                @change="applyFilters"
+                class="input w-auto"
+              >
+                <option value="created_at">Date Added</option>
+                <option value="filename">Name</option>
+                <option value="file_size">Size</option>
+                <option value="duration">Duration</option>
+              </select>
+              
+              <select
+                v-model="sortOrder"
+                @change="applyFilters"
+                class="input w-auto"
+              >
+                <option value="desc">Newest First</option>
+                <option value="asc">Oldest First</option>
+              </select>
+              
+              <select
+                v-model="viewMode"
+                @change="updateViewMode"
+                class="input w-auto"
+              >
+                <option value="grid">Grid View</option>
+                <option value="list">List View</option>
+                <option value="card">Card View</option>
+              </select>
+              
+              <select
+                v-model="pageSize"
+                @change="applyFilters"
+                class="input w-auto"
+              >
+                <option value="12">12 per page</option>
+                <option value="24">24 per page</option>
+                <option value="36">36 per page</option>
+                <option value="48">48 per page</option>
+              </select>
+            </div>
+          </div>
         </div>
       </div>
       
@@ -128,12 +153,69 @@
 
       <!-- Media Grid -->
       <div v-else>
-        <div class="media-grid">
+        <!-- Grid View -->
+        <div v-if="viewMode === 'grid'" class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-4">
           <MediaCard
             v-for="media in safeMediaArray"
             :key="media?.id || `media-${Math.random()}`"
             :media="media"
           />
+        </div>
+        
+        <!-- List View -->
+        <div v-else-if="viewMode === 'list'" class="space-y-2">
+          <div
+            v-for="media in safeMediaArray"
+            :key="media?.id || `media-${Math.random()}`"
+            class="bg-white rounded-lg shadow-sm border border-gray-200 p-4 flex items-center space-x-4 hover:shadow-md transition-shadow cursor-pointer"
+            @click="navigateToPlayer(media)"
+          >
+            <img
+              v-if="media?.id"
+              :src="getPosterUrl(media.id)"
+              :alt="media?.title || media?.filename"
+              class="w-16 h-24 object-cover rounded"
+              @error="(e) => (e.target as HTMLImageElement).style.display = 'none'"
+            />
+            <div class="flex-1">
+              <h3 class="font-semibold text-gray-900">{{ media?.title || media?.filename || 'Unknown' }}</h3>
+              <p class="text-sm text-gray-600 capitalize">{{ media?.category || 'Unknown' }}</p>
+              <p class="text-sm text-gray-500">{{ formatFileSize(media?.file_size || 0) }}</p>
+            </div>
+            <div class="text-right">
+              <p v-if="media?.duration" class="text-sm text-gray-600">{{ formatDuration(media.duration) }}</p>
+              <p class="text-xs text-gray-500">{{ formatDate(media?.created_at) }}</p>
+            </div>
+          </div>
+        </div>
+        
+        <!-- Card View -->
+        <div v-else class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div
+            v-for="media in safeMediaArray"
+            :key="media?.id || `media-${Math.random()}`"
+            class="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden hover:shadow-md transition-shadow cursor-pointer"
+            @click="navigateToPlayer(media)"
+          >
+            <img
+              v-if="media?.id"
+              :src="getPosterUrl(media.id)"
+              :alt="media?.title || media?.filename"
+              class="w-full h-48 object-cover"
+              @error="(e) => (e.target as HTMLImageElement).style.display = 'none'"
+            />
+            <div class="p-4">
+              <h3 class="font-semibold text-gray-900 mb-2">{{ media?.title || media?.filename || 'Unknown' }}</h3>
+              <div class="flex justify-between items-center text-sm text-gray-600">
+                <span class="capitalize">{{ media?.category || 'Unknown' }}</span>
+                <span>{{ formatFileSize(media?.file_size || 0) }}</span>
+              </div>
+              <div class="flex justify-between items-center text-xs text-gray-500 mt-2">
+                <span v-if="media?.duration">{{ formatDuration(media.duration) }}</span>
+                <span>{{ formatDate(media?.created_at) }}</span>
+              </div>
+            </div>
+          </div>
         </div>
 
         <!-- Pagination -->
@@ -201,11 +283,12 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted, computed, watch } from 'vue'
+import { ref, onMounted, computed } from 'vue'
 import { useMediaStore } from '@/stores/media'
 import { mediaApi } from '@/api/media'
 import MediaCard from '@/components/MediaCardNew.vue'
 import ScanInfo from '@/components/ScanInfo.vue'
+import CategoryManager from '@/components/CategoryManager.vue'
 import { FilmIcon } from '@heroicons/vue/24/outline'
 import type { MediaCategory, MediaCategoryInfo } from '@/types/media'
 
@@ -213,12 +296,12 @@ const mediaStore = useMediaStore()
 
 // State
 const categories = ref<MediaCategoryInfo[]>([])
-const selectedCategory = ref<string>('')
+const selectedCategory = ref<string>('movies') // Default to movies
 const searchQuery = ref('')
 const sortBy = ref('created_at')
 const sortOrder = ref('desc')
 const currentPage = ref(1)
-const pageSize = ref(20)
+const pageSize = ref(24) // Updated default
 const total = ref(0)
 const totalPages = ref(1)
 const isScanning = ref(false)
@@ -226,12 +309,15 @@ const showUpload = ref(false)
 const selectedFile = ref<File | null>(null)
 const fileInput = ref<HTMLInputElement | null>(null)
 const lastScanTime = ref<string>('')
+const viewMode = ref<'grid' | 'list' | 'card'>('grid')
 
-// Computed
-const safeCategoriesArray = computed(() => {
-  return Array.isArray(categories.value) ? categories.value : []
+// Category management state
+const categoryManagement = ref({
+  enabled: true,
+  categories: {} as Record<string, number>
 })
 
+// Computed
 const safeMediaArray = computed(() => {
   return Array.isArray(mediaStore.mediaFiles) ? mediaStore.mediaFiles : []
 })
@@ -245,6 +331,29 @@ const visiblePages = computed(() => {
     pages.push(i)
   }
   return pages
+})
+
+// New computed properties for enhanced category system
+const categoriesData = computed(() => {
+  return categoryManagement.value.categories
+})
+
+const enabledCategoriesCount = computed(() => {
+  return Object.keys(categoryManagement.value.categories).length
+})
+
+const selectedCategoryInfo = computed(() => {
+  // Mock category info based on selected category
+  const categoryMap: Record<string, any> = {
+    'movies': { displayName: 'Movies', description: 'Feature films and cinema' },
+    'tv_shows': { displayName: 'TV Shows', description: 'Television series and episodes' },
+    'kids': { displayName: 'Kids', description: 'Family-friendly content' },
+    'music': { displayName: 'Music', description: 'Audio files and music' },
+    'videos': { displayName: 'Videos', description: 'General video content' },
+    'all': { displayName: 'All Media', description: 'All media types' }
+  }
+  
+  return categoryMap[selectedCategory.value] || categoryMap['all']
 })
 
 // Debounced search
@@ -308,15 +417,7 @@ async function loadMedia() {
   }
 }
 
-function selectCategory(category?: string) {
-  if (!category) {
-    console.warn('selectCategory called with invalid category:', category)
-    return
-  }
-  selectedCategory.value = selectedCategory.value === category ? '' : category
-  currentPage.value = 1
-  applyFilters()
-}
+// Removed selectCategory function - now handled by CategoryManager component
 
 function applyFilters() {
   currentPage.value = 1
@@ -366,16 +467,98 @@ async function uploadFile() {
   }
 }
 
-// Removed viewMedia function - MediaCard now handles navigation internally
+// Enhanced category management methods
+function handleCategorySelected(categoryId: string) {
+  selectedCategory.value = categoryId
+  currentPage.value = 1
+  applyFilters()
+}
+
+function handleCategoriesUpdated(updatedCategories: any[]) {
+  console.log('Categories updated:', updatedCategories)
+  // Handle category configuration updates
+}
+
+function updateViewMode() {
+  // Save view mode preference
+  localStorage.setItem('watch1-view-mode', viewMode.value)
+  // Trigger re-render if needed
+}
+
+// Update category data when categories are loaded
+function updateCategoryManagement() {
+  if (categories.value.length > 0) {
+    const categoryData: Record<string, number> = {}
+    categories.value.forEach(cat => {
+      if (cat?.name && typeof cat.count === 'number') {
+        categoryData[cat.name] = cat.count
+      }
+    })
+    categoryManagement.value.categories = categoryData
+  }
+}
+
+// Utility functions for different view modes
+function navigateToPlayer(media: any) {
+  if (media?.id) {
+    // Use router to navigate to player
+    window.location.href = `/player/${media.id}`
+  }
+}
+
+function getPosterUrl(mediaId: string): string {
+  const baseUrl = (import.meta as any).env?.VITE_API_URL || 'http://localhost:8000/api/v1'
+  const cleanBaseUrl = baseUrl.replace('/api/v1', '')
+  const token = localStorage.getItem('access_token')
+  
+  return `${cleanBaseUrl}/api/v1/media/${mediaId}/poster?token=${token}`
+}
+
+function formatFileSize(bytes: number): string {
+  if (!bytes || bytes === 0) return '0 B'
+  
+  const k = 1024
+  const sizes = ['B', 'KB', 'MB', 'GB', 'TB']
+  const i = Math.floor(Math.log(bytes) / Math.log(k))
+  
+  return parseFloat((bytes / Math.pow(k, i)).toFixed(1)) + ' ' + sizes[i]
+}
+
+function formatDuration(seconds: number): string {
+  if (!seconds || typeof seconds !== 'number') return ''
+  
+  const hours = Math.floor(seconds / 3600)
+  const minutes = Math.floor((seconds % 3600) / 60)
+  const secs = Math.floor(seconds % 60)
+  
+  if (hours > 0) {
+    return `${hours}:${minutes.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`
+  }
+  return `${minutes}:${secs.toString().padStart(2, '0')}`
+}
+
+function formatDate(dateString: string | null): string {
+  if (!dateString) return ''
+  
+  try {
+    return new Date(dateString).toLocaleDateString()
+  } catch {
+    return ''
+  }
+}
 
 // Lifecycle
 onMounted(async () => {
+  // Load saved view mode preference
+  const savedViewMode = localStorage.getItem('watch1-view-mode')
+  if (savedViewMode && ['grid', 'list', 'card'].includes(savedViewMode)) {
+    viewMode.value = savedViewMode as 'grid' | 'list' | 'card'
+  }
+  
   await loadCategories()
   await loadMedia()
+  updateCategoryManagement()
 })
 
-// Watch for page changes
-watch(currentPage, () => {
-  loadMedia()
-})
+// Page and category changes handled in component methods
 </script>

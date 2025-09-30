@@ -14,3 +14,4 @@ api_router.include_router(media.router, prefix="/media", tags=["media"])
 api_router.include_router(playlists.router, prefix="/playlists", tags=["playlists"])
 api_router.include_router(subtitles.router, prefix="/media", tags=["subtitles"])
 api_router.include_router(viewing_history.router, prefix="/api/v1", tags=["viewing-history"])
+
